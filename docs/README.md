@@ -12,6 +12,6 @@ features:
   details: 掌握vue前端开发框架 能完成单页面网站的快速开发。
 - title: python
   details: 习惯用python django框架开发后台 遵循django rest framework 开发原则。
-footer: 永无止境 | Copyright © 2021-present Garnetsky
+footer: 永无止境 |渝ICP备2021008895号 Copyright © 2021-present Garnetsky
 ---
 
