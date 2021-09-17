@@ -29,7 +29,7 @@ module.exports =  {
                 ]
             },
             { text: '个人实战网站', link: 'http://www.xroot.top' },
-            { text: '脚本', link: '/guide/mytools'},
+            { text: '脚本', link: '/tools/'},
             { text: '资源', link: ''},
             { text: '游戏', link: '/'},
             { text: 'GitHub', link: 'https://github.com/Grnetsky'},
@@ -37,7 +37,8 @@ module.exports =  {
         ],
         sidebar:
             {
-                '/blogs/javascript/': ['JavaScript核心语法']
+                '/blogs/javascript/': ['JavaScript核心语法',],
+                '/tools/':['','超星搜题脚本']
             },
 
         logo: '/image/home.png'
