@@ -4,7 +4,7 @@ heroImage: /image/home.png
 heroText: 欢迎，希望这里能帮助到你
 tagline:
 actionText: 进入主页👉
-actionLink: /guide/
+actionLink: /blogs/javascript/JavaScript核心语法
 features:
 - title: javascript
   details: 熟悉JavaScript编程语言 熟练运用jquery库开发前端代码。
