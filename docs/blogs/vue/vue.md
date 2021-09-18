@@ -175,6 +175,68 @@ var vm = new Vue({
 ### 私有过滤器和全局过滤器
 私有过滤器的定义上面已经展示
 全局过滤器的定义应用 Vue.filter("过滤器名",（str）=>{return xxx})
+::: tip 提示
+npm上有day.js模块用于格式化输出时间日期
+:::
+
+## 侦听器
+### watch侦听器用于侦听数据变化，而对数据进行操作
+#### 使用方法：在根节点下创建watch节点来指向侦听器对象
+例如：
+```javascript
+var vm = new Vue({
+    data:{数据名},
+    watch:{
+        侦听的数据名(新数据,旧数据){
+            //执行操作
+        }
+    }
+})
+```
+#### 应用场景：判断用户名是否被占用（ajax）
+
+::: warning 注意
+watch若用方法格式，则进入页面不会自动触发<br/>
+若用对象格式 可以通过immediate选项让侦听器自动触发<br/>
+watch:{ 侦听数据名: {
+    handler: function(新数据,旧数据){
+            //处理函数
+} ,
+    immediate: true ->进入主页自动触发handler函数
+    deep: true  ->深度监听 若监听的是对象，则对象的属性不能被监听到 故用deep选项
+}}
+:::
 
 
+## 计算属性
+### 通过一系列的计算最终得到一个属性值，这个动态计算出来的属性可以被模板结构和methods方法使用
+#### 使用方法：在根节点下创建computed节点来指向计算属性对象
+例如：
+```javascript
+var vm = new Vue({
+    computed:{
+        计算属性名：function(){
+            return xxx  ->最终返回一个生成好的字符串
+}
+    }
+})
+使用时直接用计算属性名即可
+```
+::: warning 注意
+只要任何一个依赖数据发生变化，计算属性将被重新求值
+:::
 
+## vue-cli 脚手架
+### vue开发的标准工具 简化了webpack创建工程化vue项目，用于写单页面应用程序
+
+安装
+```javascript
+npm install -g vue/cli
+```
+#### 使用步骤
+```javascript
+vue create 项目名称
+
+按需操作选择
+
+```

@@ -14,7 +14,7 @@ module.exports =  {
                         { text: 'css', link: '/blogs/css/'},
                         { text: 'javascript', link: '/blogs/javascript/JavaScript核心语法' },
                         { text: 'jquery', link: '/blogs/jquery/'},
-                        { text: 'vue', link: '/blogs/vue/index'},
+                        { text: 'vue', link: '/blogs/vue/vue.md'},
                     ]},
                     { text: '后端',
                         items:[
