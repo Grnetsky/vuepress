@@ -14,7 +14,7 @@ module.exports =  {
                         { text: 'css', link: '/blogs/css/'},
                         { text: 'javascript', link: '/blogs/javascript/JavaScript核心语法' },
                         { text: 'jquery', link: '/blogs/jquery/'},
-                        { text: 'vue', link: '/blogs/vue/'},
+                        { text: 'vue', link: '/blogs/vue/index'},
                     ]},
                     { text: '后端',
                         items:[
@@ -31,14 +31,15 @@ module.exports =  {
             { text: '个人实战网站', link: 'http://www.xroot.top' },
             { text: '脚本', link: '/tools/'},
             { text: '资源', link: ''},
-            { text: '游戏', link: '/'},
+            { text: '游戏', link: '/blogs/'},
             { text: 'GitHub', link: 'https://github.com/Grnetsky'},
             { text: 'gitee', link: 'https://gitee.com/CaihaoX'},
         ],
         sidebar:
             {
                 '/blogs/javascript/': ['JavaScript核心语法',],
-                '/tools/':['','超星搜题脚本']
+                '/tools/':['','超星搜题脚本'],
+                '/blogs/vue/':['']
             },
 
         logo: '/image/home.png'

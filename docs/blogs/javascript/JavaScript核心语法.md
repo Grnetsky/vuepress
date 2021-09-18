@@ -7,8 +7,6 @@ sidebarDepth: 2
 
 ### Date对象
 
-
-
 #### （一）定义时间对象方法
 
 ```javascript
