@@ -157,5 +157,24 @@ v-for 后必须要有个:key属性，并且一般为item.id 如上
 
 ## 过滤器(Vue3已取消)
 ### 过滤器常用于文本格式化，只能在{{ }}中和v-bind中使用
+#### 使用方法：添加在js表达式尾部，由"|调用
+
+例如：
+```javascript
+<p>{{ username | captitalize }}</p>
+
+var vm = new Vue({
+    filters: {
+        captitalize (){  ->对应的方法名
+            return
+        } 
+    }
+    }
+)
+```
+### 私有过滤器和全局过滤器
+私有过滤器的定义上面已经展示
+全局过滤器的定义应用 Vue.filter("过滤器名",（str）=>{return xxx})
+
 
 
