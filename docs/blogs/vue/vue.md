@@ -229,7 +229,7 @@ var vm = new Vue({
 ## vue-cli 脚手架
 ### vue开发的标准工具 简化了webpack创建工程化vue项目，用于写单页面应用程序
 
-安装
+#### 安装
 ```javascript
 npm install -g vue/cli
 ```
@@ -239,4 +239,105 @@ vue create 项目名称
 
 按需操作选择
 
+```
+#### 目录结构：
+node_modules: 第三方包目录<br/>
+public: index.html 和图标的保存位置<br/>
+src：<br/>
+        &nbsp;assets:存放项目中的静态资源 css 图片等<br/>
+&nbsp;main.js:项目的入口文件，项目一启动首先执行的文件<br/>
+&nbsp;components:程序员封装的可复用组件<br/>
+&nbsp;App.vue: 项目的根组件
+
+#### Vue项目运行流程：
+通过main.js把App.vue渲染到index.html的指定区域
+* App.vue用来编写渲染的模板结构 
+* index.html中预留一个el区域
+* main.js把App.vue渲染到index.html的指定区域中
+
+#### 组件的三个组成部分
+1. temolate:模板结构
+2. script:组件的js行为 固定写法
+```javascript
+export default {
+    data(){ return xxx},
+    methods:{ xxx}
+    //其他节点
+        ...
+}
+```
+3. style 组件的样式 -> 用less语法则<style lang="less>
+::: warning 注意
+vue组件中的data不能指向对象，必须为函数<br/>
+即： data(){
+    return { 数据定义位置 }
+}
+:::
+
+#### 组件使用的三个步骤
+1. 父组件中导入子组件
+```javascript
+import "组件名" from "组件路径"
+```
+2. 使用components节点注册组件
+```javascript
+export default {
+    components:{ 组件名 }
+}
+```
+3. 以标签形式使用刚注册的组件
+```javascript
+<组件名></组件名>
+```
+::: warning 注意
+组件封装好后彼此相互独立，只有根据不同的嵌套关系才有了父子关系，兄弟关系
+:::
+若定义全局组件<br/>
+则在main.js中
+```javascript
+1. import "组件名" from "组件路径"
+2. Vue.components("自定义组件名",组件名)
+```
+#### 组件的props属性
+目的：为了提高组件的复用性，让用户自定义组件的初始值，且不可直接更改，为只读属性
+
+##### 用法
+props是组件的自定义属性，值为数组
+```javascript
+export default {
+    props["属性A","属性B",...]
+}
+```
+如何传参：
+在标签中用属性的形式，例如：
+```javascript
+<组件名 属性A="" :属性B=""></组件名> ->可以用v-bind命令绑定
+```
+
+props的默认值：用对象定义属性值即可设定默认值
+
+```javascript
+export default {
+    props:{
+        属性A: {
+            default: 0, ->设置默认值
+            type:Number, ->设置传参类型
+            required:true, ->设置是否为必须传参
+        }
+    }
+}
+```
+::: warning 注意
+若参数名为小驼峰命名法则传参时用"_"分开<br/>
+例如参数名为cmtCount 则传参时写cmt_count
+:::
+
+#### 组件间的样式冲突问题
+默认情况下Vue组件样式为全局样式<br/>
+解决办法: 给当前的style标签添加 __scoped__ 属性<br/>
+在父组件中修改子组件的样式:添加 __/deep/__ 前缀
+```css
+/deep/ 选择器{   ->/deep/一般用于给第三方组件修改默认样式
+    //样式
+}
 ```

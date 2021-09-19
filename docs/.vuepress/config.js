@@ -25,7 +25,12 @@ module.exports =  {
                     items: [
                         { text: 'nginx', link: '/blogs/nginx/'},
                         { text: 'linux', link: '/blogs/linux/'}
-                    ]}
+                    ]},
+                    { text: '工具',
+                        items: [
+                            { text: 'markdown', link: '/blogs/markdown/'}
+                        ]
+                    }
                 ]
             },
             { text: '个人实战网站', link: 'http://www.xroot.top' },
@@ -39,7 +44,9 @@ module.exports =  {
             {
                 '/blogs/javascript/': ['JavaScript核心语法',],
                 '/tools/':['','超星搜题脚本'],
-                '/blogs/vue/':['']
+                '/blogs/vue/':[''],
+                '/errolog/': ['','关于django'],
+                '/blogs/markdown/':['']
             },
 
         logo: '/image/home.png'
