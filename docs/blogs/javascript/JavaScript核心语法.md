@@ -926,3 +926,4 @@ nodeValue = 文本内容
 | beforeunload     | 页面被卸载前确认 |
 | readystatechange |                  |
 
+#### 自定义事件

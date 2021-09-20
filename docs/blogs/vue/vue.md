@@ -255,7 +255,7 @@ src：<br/>
 * index.html中预留一个el区域
 * main.js把App.vue渲染到index.html的指定区域中
 
-#### 组件的三个组成部分
+## 组件的三个组成部分
 1. temolate:模板结构
 2. script:组件的js行为 固定写法
 ```javascript
@@ -274,7 +274,7 @@ vue组件中的data不能指向对象，必须为函数<br/>
 }
 :::
 
-#### 组件使用的三个步骤
+### 组件使用的三个步骤
 1. 父组件中导入子组件
 ```javascript
 import "组件名" from "组件路径"
@@ -298,10 +298,10 @@ export default {
 1. import "组件名" from "组件路径"
 2. Vue.components("自定义组件名",组件名)
 ```
-#### 组件的props属性
+### 组件的props属性
 目的：为了提高组件的复用性，让用户自定义组件的初始值，且不可直接更改，为只读属性
 
-##### 用法
+### 用法
 props是组件的自定义属性，值为数组
 ```javascript
 export default {
@@ -341,3 +341,130 @@ export default {
     //样式
 }
 ```
+## 生命周期
+生命周期指的是一个组件从创建->运行->销毁的整个过程
+![alt 生命周期](/image/生命周期.png)
+
+生命周期函数：
+### beforCreate()
+组件的data，methods，props属性都不能使用时调用的函数
+（用的比较少）
+### create() (重要)
+组建的模板结构尚未生成，模板的data，methods，props等属性可以使用<br/>
+一般用于发送ajax请求
+
+### beforMount() 
+已有DOM结构将要把HTML渲染出来之前
+
+### mounted() (重要)
+已生成DOM结构 HTML已渲染出来
+
+### beforUpdate
+当数据变化时，页面重新渲染之前执行的函数
+
+### updated() (重要)
+当数据变化页面完成渲染之后执行的函数
+
+### beforDestroy()
+组件销毁之前执行的函数
+
+### destroyed()
+组件销毁后执行的函数
+
+## 组件之间的数据共享
+### 父传子
+#### 使用自定义属性（props和V-bind）
+```javascript
+<child 属性A="" :属性B="" :属性C=""></child>
+```
+### 子传父
+#### 使用自定义事件方式
+子组件中
+```javascript
+export default {
+    data(){
+        return {a:100 }
+    },
+    method:{
+        方法名(){this.$emit("触发事件名",this.传递参数)}
+    }
+}
+```
+父组件中
+```javascript
+<son @触发事件名="方法名"></son>
+export default {
+    data(){return {}},
+    methods:{
+        方法名(参数){
+            //操作
+        }
+    }
+    
+}
+```
+### 其他传递
+#### 用EventBus
+定义EventBus
+```javascript
+新建eventBus.js并写入
+import Vue from "vue"
+export default new Vue()
+```
+数据发送方
+```javascript
+import eventBus from "eventBus"
+export default {
+    data(){
+        return {数据}
+    },
+    methods:{
+        sendMsg(){
+            eventBus.$emit("事件名",this.参数) //触发事件
+
+        }
+    }}
+```
+接受数据方
+```javascript
+import evenBus from "eventBus"
+export default {
+    data(){
+        return {msgGet:""}
+    },
+    created()
+{
+    bus.$on("事件名", 参数 => {  //监听事件
+        //执行操作
+    })
+}
+}
+```
+## ref引用
+__用于辅助开发者获取DOM或组件的引用__
+每个Vue实例上都默认包含一个 __$ref__ 对象,里面存储着对应的DOM元素或组件的引用，默认情况下组件的$ref指向一个空对象
+### 获取元素方法：在要获取的DOM元素标签上添加 __ref__ 属性
+```javascript
+<h1 ref="myh1">这是h1元素</h1>
+
+使用时获取方法
+this.$refs.myh1
+```
+### 获取组件的方法：在组件标签中添加 __ref__ 属性
+```javascript
+<vue ref="myvue">这是个组件标签</vue>
+
+使用时获取方法
+this.$refs.myvue
+```
+::: tip 拓展
+组件的this.$nextTick()方法<br/>
+延迟到页面全部重新渲染后才执行回调函数<br/>
+例如：<br/>
+this.$nextTick(()=>{this.$refs.myvue.focus()})
+ 
+:::
+
+## 动态组件
+__指动态切换组件的显示和隐藏__
+vue提供了一个内置的<component>组件专门用来实现动态组件的渲染
