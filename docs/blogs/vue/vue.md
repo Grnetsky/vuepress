@@ -305,7 +305,7 @@ export default {
 props是组件的自定义属性，值为数组
 ```javascript
 export default {
-    props["属性A","属性B",...]
+    props:["属性A","属性B",...]
 }
 ```
 如何传参：
@@ -467,4 +467,60 @@ this.$nextTick(()=>{this.$refs.myvue.focus()})
 
 ## 动态组件
 __指动态切换组件的显示和隐藏__
-vue提供了一个内置的<component>组件专门用来实现动态组件的渲染
+vue提供了一个内置的 __\<component>__ 组件专门用来实现动态组件的渲染
+### is属性
+is属性对应的值为显示的组件名，可以为变量
+```javascript
+<component :is="state"></component>  //此时显示的是state对应的组件
+
+ <div @click="state ='right'"></div> //点击后state变为right组件
+```
+::: warning 注意
+每次切换后组件会被重新创建或销毁
+:::
+
+### 使用 __keep-alive__ 保持状态
+keep-alive便签会保存标签内部组件的状态，缓存组件，不销毁<br/>
+用法：
+```javascript
+<keep-alive> <component :is="state"></component> </keep-alive> //用keep-alive标签包裹
+```
+#### keep-alive生命周期函数
+组件被缓存时触发deactivated()
+```javascript
+在被缓存组件的内部定义
+export default {
+    data(){return {xxx}},
+    deactivated(){
+        //执行函数
+    }
+}
+```
+组件被激活时activated()
+```javascript
+在被激活组件的内部定义
+export default {
+    data(){return {xxx}},
+    activated(){
+        //执行函数
+    }
+}
+```
+
+#### keep-alive指定哪些组件会被缓存
+include属性 默认缓存包裹的所有组件
+```javascript
+<keep-alive include="组件名">...</keep-alive>
+```
+exclude属性：排除不被缓存的组件
+
+::: tip 技巧
+每个组件都有name属性，若不声明，组件名称为注册时候的名称，声明后组件名称为name属性的名称
+注册名称主要用于标签方式渲染到页面中<br/>
+name属性主要用于keep-alive实现组件缓存和调试工具看到的组件名字<br/>
+规矩是这样，其实我觉得挺多此一举的，等实际开发遇到了再说吧
+:::
+
+## 插槽
+__是vue为组件的封装者提供的能力，允许开发者在开发组件时把不确定的希望由用户指定的部分叫插槽__
+
