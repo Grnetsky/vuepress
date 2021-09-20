@@ -3,6 +3,7 @@ module.exports =  {
     description: "第一个vue博客",
     lastUpdated: '最后更新时间',
     themeConfig: {
+        lastUpdated: 'Last Updated',
         nav: [
             { text: '主页', link: '/' },
             { text: '踩坑集锦', link: '/errolog/'},
