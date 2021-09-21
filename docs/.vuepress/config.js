@@ -49,7 +49,6 @@ module.exports =  {
                 '/errolog/': ['','关于django'],
                 '/blogs/markdown/':['']
             },
-
         logo: '/image/home.png'
     }
 }

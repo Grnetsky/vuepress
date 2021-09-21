@@ -523,4 +523,128 @@ name属性主要用于keep-alive实现组件缓存和调试工具看到的组件
 
 ## 插槽
 __是vue为组件的封装者提供的能力，允许开发者在开发组件时把不确定的希望由用户指定的部分叫插槽__
+### 定义插槽
+在组件内部使用\<slot></slot>占位符来定义一个插槽，每个插槽都应该有个name属性，用来区分不同的插槽，省略则默认为default
+```javascript
+//vue组件内部
+<slot name="插槽名"></slot>
+```
+### 使用插槽
+若要指定到某个插槽中，则用 __\<template v-slot:"插槽名">\</template>__ 标签包裹内容
+```javascript
+<template v-slot:"插槽名"><p>插入内容</p></template>
+若用户未定义内容，则在slot标签中填入默认内容即可
+<template v-slot:"default"><p>默认内容</p></template>
+```
+### 简写：#
+可用"#"代替"v-slot:"
+```javascript
+<template v-slot:"插槽名"><p>插入内容</p></template>
+等价于
+<template #"插槽名"><p>插入内容</p></template>
+```
+
+### 插槽分类
+1. 具名插槽：有name属性的插槽
+2. 作用域插槽：
+    自定义属性，由插槽定义数据给插槽内容使用
+```javascript
+<slot name="default" msg="插槽定义内容"></slot>
+使用：
+<template #default="obj"> ->obj指向一个对象，该对象上有插槽的自定义属性，可以用obj.msg来获取自定义属性
+也可使用解构赋值获取自定义属性
+<template #default="{ msg }"> ->使用解构赋值获取msg属性
+```
+
+## 自定义指令
+### 私有自定义指令
+私有自定义属性只能自身使用，子组件都用不了
+#### 定义私有自定义属性
+在每个组件中，用 __directives__ 节点声明自定义指令
+```javascript{4}
+export default {
+    directives:{
+        自定义指令名:{   
+            bind(el){     ->指令一绑定到元素上就自动触发bind方法，el为指令所绑定的那个元素对象
+                //操作元素
+                el.style.color = 'red'
+            }
+        }
+}
+}
+```
+
+#### 给自定义属性传参
+```javascript{6}
+export default {
+    directives:{
+        自定义指令名:{   
+            bind(el,binding){     ->el为指令所绑定的元素的对象，binding为自定义属性对象
+                //操作元素
+                el.style.color = binding.value  ->binding对象上有个value方法用于接受用户传参
+            }
+        }
+}
+}
+```
+
+#### 使用方法
+使用：
+```javascript
+<p v-自定义指令名="参数">
+```
+::: warning 注意
+bind函数只在第一次元素绑定自定义指令时调用，当DOM元素更新时不调用
+:::
+### update函数
+update函数会在每次DOM更新时都调用, __update函数内部一般与bind函数相同__
+```javascript
+export default {
+    directives:{
+        自定义指令名:{   
+            bind(el,binding){     ->el为指令所绑定的元素的对象，binding为自定义属性对象
+                //操作元素
+                el.style.color = binding.value  ->binding对象上有个value方法用于接受用户传参
+            },
+            update(el,binding){
+                //操作元素
+            }
+        }
+}
+}
+
+```
+### 函数简写
+当bind函数和uodate函数内容相同时，可简写成
+```javascript
+export default {
+    directives: {
+        自定义指令名(el,binding){
+            //操作元素
+            el.style.color = binding.value
+        }
+    }
+}
+```
+### 全局自定义属性
+在main.js中使用
+```javascript
+Vue.directive("自定义属性名",function (el,bingding){
+    //操作元素
+})
+```
+## Vue-router 路由
+__路由是地址与组件之间的对应关系__<br/>
+<p>前端路由工作过程<p>
+1. 用户点击路由链接
+2. 导致url地址中的hash地址发生了改变
+3. 前端路由监听到了hash地址的变化
+4. 前端路由把hash地址对应的组件渲染到浏览器中
+::: tip 原理
+window有个onhashchange事件，当hash地址改变时触发这个事件
+:::
+
+### vue-router的基本使用
+
+
 
