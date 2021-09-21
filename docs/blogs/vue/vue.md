@@ -645,6 +645,88 @@ window有个onhashchange事件，当hash地址改变时触发这个事件
 :::
 
 ### vue-router的基本使用
+#### 安装路由
+1. 安装vue-router包
+```javascript
+npm install vue-router -S
+```
+2. 创建路由模块
+在src文件夹下新建一个router文件夹，router文件夹中新建index.js文件
+在index.js中配置
+```javascript
+//index.js
 
+import Vue from "Vue"
+import vueRouter from "vue-router"
+Vue.use(vueRouter)
+const router = new vueRouter()
+export default router
+
+```
+
+3. 在mian.js中添加
+```javascript
+import router from "router/index.js"
+new Vue({
+    render:h=>h(App),
+    router
+}).$mount("#app")
+```
+4. 在项目中使用router-view标签
+<router-view></router-view>标签是组件最终的输出地
+在main.js中的VueRouter()中写
+```javascript
+router=VueRouter({
+    router:[
+        { path:"路径",component:展示组件 },
+            ...
+    ]
+})
+```
+```javascript
+用<router-link to="/home"></router-link>  ->to属性对应的是跳转hash地址
+
+redirect重定向
+{ path:'/', redirect:'/home' }
+
+```
+
+### 嵌套路由
+__通过路由实现的组件嵌套展示__<br/>
+实现代码
+```javascript
+router:[
+    { path:"/about", component:About,children:[
+            { path:"Tap1",component:Tap1 }
+        ]}
+]
+```
+#### 动态路由匹配
+--把hash地址可变部分定义为参数，从而提高路由功能的复用性__
+在路由规则中使用 "__:__"来定义动态路由
+```javascript
+{ path:"/home/:id",component:Movie,props:true} ->:id为动态路由
+```
+#### 在组件中获取参数项的值
+* 方法一：在组件中用this.$router.params.参数项名获取（this.$router为路由的参考对象）
+* 方法二：给路由规则开启props传参
+```javascript
+//路由中
+{ path:"/home/:id",component:Movie,props:true} ->为当前路由规则开启props传参
+
+//对应组件中
+在组件中使用props:["mid"]接受
+```
+
+::: tip 技巧
+用this.$route.fullpath获取完整路径<br/>
+用this.$route.path获取路径（不包含查询参数）
+:::
+
+### 编程式导航
+####导航的分类：
+1. 声明式导航：通过点击链接实现页面跳转的方式
+2. 编程式导航：在浏览器中通过调用API方法来实现页面的跳转，例如：location.herf属性
+#### vue-router中的编程式导航API
 
 

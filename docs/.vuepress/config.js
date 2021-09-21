@@ -36,7 +36,7 @@ module.exports =  {
             },
             { text: '个人实战网站', link: 'http://www.xroot.top' },
             { text: '脚本', link: '/tools/'},
-            { text: '资源', link: ''},
+            { text: '资源', link: '/resource/'},
             { text: '游戏', link: '/blogs/'},
             { text: 'GitHub', link: 'https://github.com/Grnetsky'},
             { text: 'gitee', link: 'https://gitee.com/CaihaoX'},
