@@ -728,5 +728,72 @@ router:[
 1. 声明式导航：通过点击链接实现页面跳转的方式
 2. 编程式导航：在浏览器中通过调用API方法来实现页面的跳转，例如：location.herf属性
 #### vue-router中的编程式导航API
+|方法|描述|
+|---|---|
+|this.$router.push("hash地址") |->跳到指定的hash地址，并增加浏览器记录|
+|this.$router.replace("hash地址")|跳到指定的hash地址。并替换当前历史记录|
+|this.$router.go(数值n)    |n为正整数或负整数，表示在历史页中前进或倒退n个长度|
+|this.$roter.back()|倒退一个页面|
+|this.$router.forward()|前进一个页面|
+
+### 导航守卫 
+__控制路由的访问权限__
+
+#### 全局前置守卫
+__每次发生路由的导航跳转时都会触发全局前置守卫__
+##### 声明全局前置守卫
+在router文件夹的index.js中
+```javascript
+// router/index.js
+const router = new VueRouter({...})
+router.beforeEach(function (to, from, next){
+    ...
+}))
+```
+function(to, from, next){...}
+|参数|描述|
+|---|---|
+|to|要访问的路由信息对象|
+|from|要离开的路由信息对象|
+|next|是一个函数的引用，next()表示允许跳转|
+next函数的三种调用方式<br/>
+
+|方式|描述|
+|---|---|
+|next()|表示直接放行，允许跳转|
+|next("hash地址")|强制跳转到指定页面，next("/login")强制跳转到登录页面|
+|next(false)|强制停留在当前页面|
+
+##### 控制访问权限代码
+```javascript
+// router/index.js
+router.beforeEach(to, from, next){
+    if (to.path == "/main"){
+        const token = localStorage.getItem("token")
+    if (token){
+        next()
+    }
+    else {
+        next("/login")
+    }}
+    else {
+        next()
+    }
+}
+```
+__多个router-view时__
+```javascript
+//router/index.js
+{path:"/about",name:"about",components:{name1:组件名,name2:组件名,...}}
+```
+
+::: tip 技巧
+__为了方便第三方库的使用可以在vue原型上挂载第三方库的插件__
+例如<br/>
+Vue.prototype.axios = axios 将axios挂载到Vue原型上
+使用时可以直接用Vue.axios使用
+:::
+
+
 
 
