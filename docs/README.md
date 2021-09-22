@@ -14,5 +14,14 @@ features:
   details: 习惯用python django框架开发后台 遵循django rest framework 开发原则。
 footer: 永无止境 |渝ICP备2021008895号 Copyright © 2021-present Garnetsky
 ---
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?2f39d4ae56c0a205004d3e19e862568d";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
 
 
