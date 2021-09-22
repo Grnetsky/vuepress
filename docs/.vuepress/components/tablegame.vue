@@ -158,7 +158,7 @@ var table, //����
 
     hasShot = false;
 
-shots = 0; //��������
+var shots = 0; //��������
 
 window.onload = function() {
 
@@ -1031,6 +1031,11 @@ function showTips() {
 
   }
 
+}
+export default {
+  mounted(){
+    this.window = window
+  }
 }
 
 </script>

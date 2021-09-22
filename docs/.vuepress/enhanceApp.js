@@ -7,4 +7,10 @@ export default ({
                     isServer // 当前应用配置是处于 服务端渲染 或 客户端
                 }) => {
     // ...做一些其他的应用级别的优化
+    import('jquery').then(module => {
+        let prettifyTable = module.default;
+        prettifyTable();
+    }).catch(error => {
+        console.log(error);
+    });
 }
