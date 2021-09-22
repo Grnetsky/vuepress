@@ -794,6 +794,9 @@ Vue.prototype.axios = axios 将axios挂载到Vue原型上
 使用时可以直接用Vue.axios使用
 :::
 
+## 官方文档
+__为了方便此处提供了 [Vue中文官方文档](https://cn.vuejs.org/v2/guide/routing.html?)__ 和 __[vue-router中文官方文档](https://router.vuejs.org/zh/guide/)__
+
 
 
 

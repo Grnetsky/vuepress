@@ -1,4 +1,5 @@
 module.exports =  {
+    Plugin: [require('jquery')],
     title: "蔡豪的个人博客 | 资源站",
     description: "第一个vue博客",
     lastUpdated: '最后更新时间',
@@ -37,7 +38,7 @@ module.exports =  {
             { text: '个人实战网站', link: 'http://www.xroot.top' },
             { text: '脚本', link: '/tools/'},
             { text: '资源', link: '/resource/'},
-            { text: '游戏', link: '/blogs/'},
+            { text: '游戏', link: '/games/'},
             { text: 'GitHub', link: 'https://github.com/Grnetsky'},
             { text: 'gitee', link: 'https://gitee.com/CaihaoX'},
         ],
@@ -47,7 +48,8 @@ module.exports =  {
                 '/tools/':['','超星搜题脚本'],
                 '/blogs/vue/':[''],
                 '/errolog/': ['','关于django'],
-                '/blogs/markdown/':['']
+                '/blogs/markdown/':[''],
+                '/games/':['','tablegame']
             },
         logo: '/image/home.png'
     }
