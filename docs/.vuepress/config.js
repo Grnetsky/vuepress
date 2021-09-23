@@ -18,10 +18,10 @@ module.exports =  {
             { text: '踩坑集锦', link: '/errolog/'},
             { text: '笔记',
                 items:[
+                    { text:'计算机基础',link:''},
+                    { text:"数据结构与算法",link:'/blogs/数据结构与算法/'},
                     { text: '前端',
                     items:[
-                        { text: 'html', link: '/blogs/html/'},
-                        { text: 'css', link: '/blogs/css/'},
                         { text: 'javascript', link: '/blogs/javascript/JavaScript核心语法' },
                         { text: 'jquery', link: '/blogs/jquery/'},
                         { text: 'vue', link: '/blogs/vue/vue.md'},
@@ -58,7 +58,7 @@ module.exports =  {
                 '/blogs/vue/':[''],
                 '/errolog/': ['','关于django'],
                 '/blogs/markdown/':[''],
-                '/games/':['','tablegame']
+                '/games/':['','tablegame',]
             },
         logo: '/image/home.png'
     }

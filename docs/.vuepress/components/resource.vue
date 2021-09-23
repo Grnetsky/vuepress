@@ -11,7 +11,7 @@ export default {
   data(){
     return {
       mydate:[
-        {id:1,name:"a"},
+        {id:1,name:"A"},
         {id:2,name:"b"},
         {id:3,name:"c"},
       ]
@@ -40,5 +40,9 @@ export default {
   margin: 15px;
   border: 4px solid tomato;
   background-color: pink;
+  transition: all .3s;
+}
+.resource:hover {
+  transform: translateY(-10px);
 }
 </style>

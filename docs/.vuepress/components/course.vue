@@ -1,8 +1,10 @@
 <template>
   <div id="course_container">
-
+    <audio src=""></audio>
     <div class="resource" v-for="i in mydate" @click="alert('124')">
-      <a :href="i.link"><p>{{i.name}}</p></a>
+      <a :href="i.link"><p>{{i.name}}</p>
+      <p>{{i.detail}}</p>
+      </a>
 
     </div>
   </div>
@@ -13,7 +15,7 @@ export default {
   data(){
     return {
       mydate:[
-        {id:1,name:"html/css",link:"https://www.bilibili.com/video/BV1cf4y1j7hL",detail:""},
+        {id:1,name:"数据结构与算法/css",link:"https://www.bilibili.com/video/BV1cf4y1j7hL",detail:"HTML和CSS作为web页面的骨架是前端必学的基础课"},
         {id:2,name:"javascript",link:"https://www.bilibili.com/video/BV1Sy4y1C7ha?spm_id_from=333.999.0.0"},
         {id:3,name:"javascript高级",link:"https://www.bilibili.com/video/BV1KJ411x7X7?from=search&seid=9271643685260791561&spm_id_from=333.337.0.0"},
         {id:4,name:"jquery",link: "https://www.bilibili.com/video/BV1pt411H7D6?from=search&seid=14476124447803955135&spm_id_from=333.337.0.0"},
@@ -52,8 +54,7 @@ a:link {
   height: 250px;
   border-radius: 10px;
   margin: 15px;
-  border: 4px solid tomato;
-  background-color: pink;
+  border:2px solid;
   transition: all .3s;
 }
 #course_container {
