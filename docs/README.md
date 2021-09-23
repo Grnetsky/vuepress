@@ -6,22 +6,14 @@ tagline:
 actionText: 进入主页👉
 actionLink: /blogs/javascript/JavaScript核心语法
 features:
-- title: javascript
-  details: 熟悉JavaScript编程语言 熟练运用jquery库开发前端代码。
-- title: Vue
-  details: 掌握vue前端开发框架 能完成单页面网站的快速开发。
-- title: python
-  details: 习惯用python django框架开发后台 遵循django rest framework 开发原则。
+- title: 前端
+  details: html css JavaScript jQuery Vue React 技术栈
+- title: 后端
+  details: python django django rest framework 后端技术栈
+- title: 服务器
+  details: Linux Nginx Mysql 服务器部署
 footer: 永无止境 |渝ICP备2021008895号 Copyright © 2021-present Garnetsky
 ---
-<script>
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "https://hm.baidu.com/hm.js?2f39d4ae56c0a205004d3e19e862568d";
-  var s = document.getElementsByTagName("script")[0];
-  s.parentNode.insertBefore(hm, s);
-})();
-</script>
+
 
 

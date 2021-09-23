@@ -1,8 +1,7 @@
 <template>
   <div>
   <div class="resource" v-for="i in mydate" @click="alert('124')">
-    <li>{{ i.id}}</li>
-    {{i.name}}
+    <p>{{ i.id }}{{i.name}}</p>
 </div>
   </div>
 </template>
@@ -42,6 +41,4 @@ export default {
   border: 4px solid tomato;
   background-color: pink;
 }
-
-
 </style>
