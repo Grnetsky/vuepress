@@ -36,6 +36,10 @@ module.exports =  {
                         { text: 'nginx', link: '/blogs/nginx/'},
                         { text: 'linux', link: '/blogs/linux/'}
                     ]},
+                    { text:"数据库",items:[
+                            { text:"Mysql",link:"/blogs/数据库/Mysql"},
+                            { text: "redis",link: "/blogs/数据库/redis"}
+                        ]},
                     { text: '工具',
                         items: [
                             { text: 'markdown', link: '/blogs/markdown/'}
