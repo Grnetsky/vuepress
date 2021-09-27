@@ -62,7 +62,8 @@ module.exports =  {
                 '/blogs/vue/':[''],
                 '/errolog/': ['','关于django'],
                 '/blogs/markdown/':[''],
-                '/games/':['','tablegame',]
+                '/games/':['','tablegame',],
+                '/blogs/Django/':['','django rest framework']
             },
         logo: '/image/home.png'
     }
