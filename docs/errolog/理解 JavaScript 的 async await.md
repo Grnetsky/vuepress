@@ -3,7 +3,7 @@ JavaScript 中的 async/await 是 AsyncFunction 特性 中的关键字。目前�
 
 我第一次看到 async/await 这组关键字并不是在 JavaScript 语言里，而是在 C# 5.0 的语法中。C# 的 async/await 需要在 .NET Framework 4.5 以上的版本中使用，因此我还很悲伤了一阵——为了要兼容 XP 系统，我们开发的软件不能使用高于 4.0 版本的 .NET Framework。
 
-我之前在《闲谈异步调用“扁平”化》 中就谈到了这个问题。无论是在 C# 还是 JavaScript 中，async/await 都是非常棒的特性，它们也都是非常甜的语法糖。C# 的 async/await 实现离不开 Task 或 Task<Result> 类，而 JavaScript 的 async/await 实现，也离不开 Promise。
+我之前在《闲谈异步调用“扁平”化》 中就谈到了这个问题。无论是在 C# 还是 JavaScript 中，async/await 都是非常棒的特性，它们也都是非常甜的语法糖。C# 的 async/await 实现离不开 Task 或 Task\<Result> 类，而 JavaScript 的 async/await 实现，也离不开 Promise。
 
 现在抛开 C# 和 .NET Framework，专心研究下 JavaScript 的 async/await。
 
@@ -251,7 +251,6 @@ doIt();
 
 ## 3. 洗洗睡吧
    就目前来说，已经理解 async/await 了吧？但其实还有一些事情没提及——Promise 有可能 reject 啊，怎么处理呢？如果需要并行处理3个步骤，再等待所有结果，又该怎么处理呢？
-
-阮一峰老师已经说过了，我就懒得说了。<br/>
+<br/>
 __转载自软件工程师 边城__
 

@@ -1,2 +1,2 @@
-<resource></resource>
+<ClientOnly><resource></resource></ClientOnly>
 

@@ -1,14 +1,13 @@
 module.exports =  {
     head: [
         // 添加百度统计
-
             ["script",
             {},
             'var _hmt = _hmt || [];(function() {var hm = document.createElement("script");hm.src = "https://hm.baidu.com/hm.js?2f39d4ae56c0a205004d3e19e862568d";var s = document.getElementsByTagName("script")[0];s.parentNode.insertBefore(hm, s);})();']
 
     ],
     Plugin: [require('jquery')],
-    title: "蔡豪的个人博客 | 资源站",
+    title: "蔡豪的个人博客 | 学习笔记中心",
     description: "第一个vue博客",
     lastUpdated: '最后更新时间',
     themeConfig: {
@@ -25,6 +24,7 @@ module.exports =  {
                         { text: 'javascript', link: '/blogs/javascript/JavaScript核心语法' },
                         { text: 'jquery', link: '/blogs/jquery/'},
                         { text: 'vue', link: '/blogs/vue/vue.md'},
+                        {text: 'uniapp',link:'/blogs/uniapp/uniapp学习笔记.md'}
                     ]},
                     { text: '后端',
                         items:[
@@ -60,11 +60,13 @@ module.exports =  {
                 '/blogs/javascript/': ['JavaScript核心语法',],
                 '/tools/':['','超星搜题脚本'],
                 '/blogs/vue/':[''],
-                '/errolog/': ['','关于django'],
+                '/errolog/': ['','axios跨域请求解决办法','关于django','理解 JavaScript 的 async await','浏览器控制台原理以及返回undefined的理解','深入浅出iframe'],
                 '/blogs/markdown/':[''],
                 '/games/':['','tablegame',],
-                '/blogs/Django/':['','django rest framework']
+                '/blogs/Django/':['','django rest framework'],
+                '/blogs/jquery/':['','jQuery从入门到精通笔记'],
+                '/blogs/python/':['','python进阶','魔法方法.md','meiduo',],
             },
-        logo: '/image/home.png'
+        logo: '/image/home.jpeg'
     }
 }

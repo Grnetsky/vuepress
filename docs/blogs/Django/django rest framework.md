@@ -1,4 +1,5 @@
 # 引入Django REST framework
+<a href="/image/drf/djangorestframework思维导图.pdf" download>下载Djangorestframework思维导图</a>
 
 在本章中，我们要大家介绍为什么学习Django REST framework，它能帮助我们做哪些事情。
 

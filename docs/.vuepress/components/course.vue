@@ -65,11 +65,10 @@ a:link {
 
 }
 .resource:hover {
-  transform: scale(1.05);
-  box-shadow: 2px 2px 2px 2px rgba(0,0,0,.2);
+  box-shadow: 10px 10px 20px 1px rgba(0,0,0,.2);
 
 }
 .resource p {
-
+  text-align: center;
 }
 </style>

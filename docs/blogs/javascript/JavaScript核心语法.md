@@ -381,9 +381,40 @@ undefined //3秒后
 3. all()方法
 
    Promise的all方法提供了并行执行异步操作的能力，并且在所有异步操作执行完后才执行回调。
+   ::: warning 注意
+   promise.all方法内的promise实例都必须要resolve后才能执行all方法的resolve，如果内部的promise实例reject了但是自己调用了catch方法，则也算resolve了
+   :::
+```javascript
+var p1 = new Promise((resolve, reject) => {
+   resolve('hello');
+})
+        .then(result => result)
+        .catch(e => e);
+
+var p2 = new Promise((resolve, reject) => {
+   reject(123)
+})
+        .then(result => result)
+        .catch(e => e);
+
+Promise.all([p1,p2])
+        .then(function(value) {
+           console.log(value);
+        })
+        .catch(function(re) {
+           console.log(re);
+        })
+// 最后输出['hallo',123]
+```
+此时大家的第一个想法是不是这个all会失败呢？嗯，其实我开始也是这样认为的，但是认真分析一下这段代码就会发现其实并不是我们想的那么简单的。下面我们来分析一下：
+
+p1肯定毫无疑问是成功的；
+p2在函数里直接抛出一个错误。但是注意了，p2有自己的catch的函数，catch函数是可以捕获到前面抛出的错误的；
+因为p2自己可以捕获到错误，所以在Promise.all（）方法里p1，p2两个Promise都是resolve的状态，因此会调用then方法指定的回调函数。
+
 
    ```javascript
-   let p = new Promise.all([
+   let p = Promise.all([
      Promise.resolve()
      Promise.resolve()
    ])
@@ -391,7 +422,6 @@ undefined //3秒后
      //执行代码
    }) //每个包含的期约都解决后执行
    ```
-
    
 
 4. finally()方法
@@ -413,8 +443,49 @@ undefined //3秒后
 
    Promise的race方法提供了并行执行异步操作的能力，只要有一个异步操作执行完后就执行回调
 
+#### 期约的拓展
+1. 取消期约
+在实际开发中，会有取消期约的需求，但是js并没有提供类似的api，实际上T39委员会曾经准备添加这一特性，提案最终都被测回了
+，他们认为期约是激进的一旦执行，便不能取消。
+事实上，我们可以封装类似的方法来达到取消期约的表面效果，需要说明的是这里提到的是表面。因为我们只能做到不等待期约执行结束，并且对期约返回的数据不做处理，从而达到类似取消期约的效果，
+我们可以用期约的race方法来处理
+```javascript
+//传入一个正在执行的promise
+function getPromiseWithAbort(p){
+    let obj = {};
+    //内部定一个新的promise，用来终止执行
+    let p1 = new Promise(function(resolve, reject){
+        obj.abort = reject;
+    });
+    obj.promise = Promise.race([p, p1]);
+    return obj;
+}
+```
+执行
+```javascript
+var promise  = new Promise((resolve)=>{
+ setTimeout(()=>{
+  resolve('123')
+ },3000)
+})
 
+var obj = getPromiseWithAbort(promise)
 
+obj.promise.then(res=>{console.log(res)})
+
+//如果要取消
+obj.abort('取消执行')
+
+```
+其实取消promise执行和取消请求是一样的，并不是真的终止了代码的执行，而是对结果不再处理。另外fetch api虽然增加了新的标准实现，但仍然存在兼容问题，而且只能在浏览器中使用。那么非浏览器的环境中呢？比如RN？所以如果想要达到一种通用的方式，那么本文的取消promise的方式应该是个不错的方式。
+
+目前知名的axios库也有abort能力，详情请点击[axios官方网站](http://www.axios-js.com/docs/)
+
+2. 期约进度通知
+可以使用扩招Promise类的方法，为其添加notify方法
+```javascript
+
+```
 
 
 ### 异步函数
@@ -894,7 +965,7 @@ nodeValue = 文本内容
 | keydown   | 用户按下按键时触发，持续按住重复触发           |
 | keyup     | 用户释放按键时触发                             |
 | keypress  | 用户按下按键并产生字符时触发，持续按住重复触发 |
-| textInput |                                                |
+| textInput | 记录字符被输入到可编辑区域时触发，可记录字符是如何被输入到控件中的 |                                              |
 |           |                                                |
 
 #### 输入事件
@@ -905,7 +976,7 @@ nodeValue = 文本内容
 | change |      |
 | submit |      |
 | reset  |      |
-|        |      |
+
 
 #### 加载事件
 
@@ -925,5 +996,81 @@ nodeValue = 文本内容
 | contextmenu      | 显示右键菜单     |
 | beforeunload     | 页面被卸载前确认 |
 | readystatechange |                  |
+|DOMContentLoaded|DOM树构建完后触发|
+|||
 
 #### 自定义事件
+
+## canvas与动画
+__此部分先暂时跳过。以后补充__
+
+## 文本框编程
+html中有两种方式表示文本框，一种是 __input__ 元素，另一种是 __textarea__ 元素。这两种控件非常相似，但也有不同之处
+不同之处：
+1. **最大字符限制方法不同**
+input使用maxlength属性来限制最大字符数
+```html
+<input type="text" maxlength="20">
+```
+textarea使用rows指定文本的高度，cols指定文本框的高度
+```html
+<textarea cols="30" rows="10"></textarea>
+```
+### 选择文本
+1. **select事件**
+当选中文本框文本时会触发此事件
+2. **取得选中文本**
+HTML5扩展了两个属性
+
+|属性|说明|
+| --- | --- | 
+|selectionStart|文本选区的起点|
+|selectionEnd|文本选区的终点|
+
+```javascript
+function getSelectText(textbox) {
+    return textbox.value.substring(textbox.selectionStart,textbox.selectionEnd)
+}
+```
+
+### 输入过滤
+不同文本框经常需要保证输入特定类型的数据格式，或者数据需要包含特定的字符或必须匹配的每个特定的模式
+1. 屏蔽字符
+使用String.fromCharCode()方法将charCode转换为字符，再用正则匹配，若为非期望的字符，则调用preventDefault方法屏蔽输入
+```javascript
+texbox.addEventListener("keypress",(event)=>{
+    
+})
+```
+
+2. 处理剪切板
+关于剪贴板的6个事件
+|事件名|说明||
+|beforecopy|复制操作发生前触发||
+|copy|复制操作发生时||
+|beforecut|剪切操作发生是触发||
+|cut|剪切操作发生时触发||
+|beforepaste|粘贴操作发生前触发||
+|paste|粘贴操作发生时触发||
+
+剪贴板上的数据可以通过访问window（IE）对象或event（firefox,safari,chrome）对象上的ClipboardData对象来获取，在非ie浏览器中，只能在剪贴板事件期间访问clipboardData对象，以防未经授权访问剪贴板
+clipboardData对象上有三个方法
+
+|方法|说明|
+|---|---|
+|getData|从剪贴板上检索数据，并接受一个参数，该参数是要检索的数据格式（text/url）|
+|setData|与getData方法类似，第一个参数是指定数据格式1，第二个参数是设置放到剪贴板的文本|
+|clearData|清除数据|
+
+**阻止粘贴非指定类型的文本**
+````javascript
+textbox.addEventListener("paste",(event)=>{
+    let text = getClipboardText(event);
+if(!/^\d*$/.test(text)){
+    event.prvenDefault();
+}
+})
+````
+
+## 富文本编辑
+### 
