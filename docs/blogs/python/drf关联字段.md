@@ -1,6 +1,9 @@
 ---
 sidebar: auto
 ---
+---
+sidebar: auto
+---
 DRF教程10-关系字段
 https://www.django-rest-framework.org/api-guide/relations/
 

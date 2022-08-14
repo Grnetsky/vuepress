@@ -1,8 +1,9 @@
 <template>
   <div>
-  <div class="resource" v-for="i in mydate" @click="alert('124')">
-    <p>{{ i.id }}{{i.name}}</p>
-</div>
+<!--  <div class="resource" v-for="i in mydate" @click="alert('124')">-->
+<!--    <p>{{ i.id }}{{i.name}}</p>-->
+<!--</div>-->
+    <h1>待补充</h1>
   </div>
 </template>
 
