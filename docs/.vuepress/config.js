@@ -15,7 +15,7 @@ module.exports =  {
         nav: [
             { text: '主页', link: '/' },
             { text: '踩坑集锦', link: '/errolog/'},
-            { text:'蓝桥杯', link: '/blogs/lanqiao/'},
+            // { text:'蓝桥杯', link: '/blogs/lanqiao/'},
             { text: '笔记',
                 items:[
                     // { text:'计算机基础',link:''},
