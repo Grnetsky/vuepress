@@ -1,6 +1,7 @@
 ---
-sidebar: auto
+sidebarDepth: 2
 ---
+
 # 手写promiseA+规范
 ```js
 const PENDING = 'pending';
@@ -181,5 +182,4 @@ MyPromise.race = function (promises) {
         }
     });
 };
-
 ```

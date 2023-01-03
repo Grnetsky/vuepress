@@ -1,6 +1,7 @@
 ---
 sidebar: auto
 ---
+# django用户模块详解
 auth模块是Django提供的标准权限管理系统,可以提供用户身份认证, 用户组和权限管理。
 
 auth可以和admin模块配合使用， 快速建立网站的管理系统。
@@ -193,8 +194,3 @@ pass
 {% if user.is_authenticated %}
 {% endif %}
 判断用户是否登录
-
-作者：唯老
-链接：https://www.jianshu.com/p/5c94b0d2dc84
-来源：简书
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。

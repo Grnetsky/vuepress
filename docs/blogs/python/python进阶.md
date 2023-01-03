@@ -1,31 +1,5 @@
----
-sidebar: auto
----
+
 # python进阶
-
-## 1 个人介绍
-
-刘清政，刘老师，老刘 ，Justin
-
-##  2 关于编辑器
-
-python开发：pycharm（收费），vscode（免费），sublintext，
-
-go开发：goland（收费），vscode，国产的
-
-java：idea（收费），eclipse（免费），MyEclipse（收费）
-
-android：androidstudio（免费），eclipse+adt
-
-前端：webstorm（收费）
-
-php：phpstorm（收费）
-
-数据库开发：data
-
-jetbrains公司出的全家桶，一个注册码，可以都用
-
-androidstudio：买了jetbrains公司授权，在它基础上，做了它
 
 ## 3  基础串讲
 
@@ -402,7 +376,7 @@ import pymysql#连接数据库conn=pymysql.connect(host='101.133.225.166', user=
 
 2 通过上下文管理器写一个mysql的连接，通过with管理
 
-3 使用django实现token功能
+3 使用django实现token功能****
 
 
 
@@ -423,8 +397,6 @@ wsgi协议是py中的一个协议：规定了如何拆，封http协议
 ```
 
 ### 2 django请求生命周期
-
-![1593655165215](C:\Users\oldboy\AppData\Roaming\Typora\typora-user-images\1593655165215.png)
 
 ### 3 路由控制
 
@@ -1277,7 +1249,6 @@ class BookModelSerializer(serializers.ModelSerializer):    class Meta:        mo
 
 ## 1 如果有这个错（把rest_framework在app中注册一下）
 
-![1594086609193](C:\Users\oldboy\AppData\Roaming\Typora\typora-user-images\1594086609193.png)
 
 ## 2补充自己封装Respons对象
 
@@ -1425,7 +1396,6 @@ class BookModelSerializer(serializers.ModelSerializer):    class Meta:        mo
 
 ## 1 如果有这个错（把rest_framework在app中注册一下）
 
-![1594086609193](C:\Users\oldboy\AppData\Roaming\Typora\typora-user-images\1594086609193.png)
 
 ## 2补充自己封装Respons对象
 
@@ -1541,7 +1511,7 @@ class Book6View(ViewSetMixin,APIView): #一定要放在APIVIew前
 
 
 
-![1594180914084](/Users/mac/Desktop/DRF课件/day82/代码笔记/assets/1594180914084.png)
+
 
 # 作业
 

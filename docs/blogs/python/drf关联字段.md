@@ -1,33 +1,17 @@
----
-sidebar: auto
----
----
-sidebar: auto
----
-DRF教程10-关系字段
+
+# DRF教程10-关系字段
 https://www.django-rest-framework.org/api-guide/relations/
 
 在编程中核心的就是数据结构。
 
 关系字段用来表示model之间的关系，比如外键，m2m，o2o，还有反转关系，自定义关系-GenericForeignKey
 
-关系字段申明在relations.py中，在使用的时候，可以在自己的序列化类中使用serializers.<FieldName>来引用。
+关系字段申明在relations.py中，在使用的时候，**可以在自己的序列化类中**使用serializers. \<FieldName>\来引用。
 
 
 
 使用ModelSerializers类的时候，会自动生成序列化字段和关系，我们可以检查这些自动生成的字段，然后来决定如何自定义关系样式。
 
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-(venv) E:\Python\dj_test>python manage.py shell
 >>> from xxx.serializers import ClothesSerializer
 >>> serializer = ClothesSerializer()
 >>> print(repr(serializer))
@@ -184,7 +168,7 @@ If you require more complex hyperlinked representation you'll need to customize 
 
 Arguments:
 
-view_name - The view name that should be used as the target of the relationship. If you're using the standard router classes this will be a string with the format <modelname>-detail. required.
+view_name - The view name that should be used as the target of the relationship. If you're using the standard router classes this will be a string with the format /<modelname/>-detail. required.
 queryset - The queryset used for model instance lookups when validating the field input. Relationships must either set a queryset explicitly, or set read_only=True.
 many - If applied to a to-many relationship, you should set this argument to True.
 allow_null - If set to True, the field will accept values of None or the empty string for nullable relationships. Defaults to False.
@@ -193,22 +177,6 @@ lookup_url_kwarg - The name of the keyword argument defined in the URL conf that
 format - If using format suffixes, hyperlinked fields will use the same format suffix for the target unless overridden by using the format argument.
 SlugRelatedField
 它的作用是得到关联表的具体某个字段
-
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
 # Clothes的color是外键，默认情况下，color字段会对应母表的主键，id。
 # 使用SlugRelatedField可以指向外键，slug_field表示获取哪个字段返回给color
 # 这里color这个属性就被重写了
@@ -242,34 +210,7 @@ HyperlinkedIdentityField
 　
 
 Nested relationships
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
+
 class ColorsSerializer(serializers.ModelSerializer):
 # 序列化嵌套
 clothes = ClothesSerializer(many=True, read_only=True)

@@ -19,4 +19,28 @@
 * redis支持数据的备份，即master-slave的数据备份
 
 ## redis安装
-* 下载redis
+[https://redis.io/download
+](下载redis)
+
+
+### 命令
+redis-server 执行文件名来开启redis服务器 
+redis-cle 开启redis
+
+### 值命令
+set name value 设置值
+
+setx key seconds value 设置过期时间
+
+mset key1 value1 key2 value2...  设置多个值
+
+append key value 追加值
+
+get key 获取值
+
+mget key1 key2 获取一组值
+
+select index 切换数据库
+
+flushall 删除所有数据库
+
