@@ -50,7 +50,7 @@ export const reactiveTableMixin = {
 ```
 ### 什么是Vue.extends 组件继承
 
-vueextend 组件继承
+vue extend 组件继承
 ```html
 MyPrompt.vue组件
 <template>
@@ -141,7 +141,7 @@ import MyPromot from './MyPrompt.vue'
 
 let MyPromptConstructor = Vue.extend(MyPromot)
 let instance
-const initMyPromptTip = function(options = {}) {
+const initMyProTip = function(options = {}) {
     instance = new MyPromptConstructor({
       el:document.createElement('div'),
       data: options,

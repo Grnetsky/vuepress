@@ -48,7 +48,7 @@ sidebar: auto
     history.pushState({name:'deskname'},'desk','/desk')
     content.innerHTML="桌面"
 })
-    window.onpopstate=function(e){
+    window.onpopstate=function(e){ 
     let name=e.state.name
     if(name=='loginname'){
     content.innerHTML="这是登录"

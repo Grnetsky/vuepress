@@ -176,9 +176,9 @@ h1 {
     <!--    // 固定写法 指定动画为animate.css-->
     <transition-group
         name="animate__animated animate__bounce"  
-        appear
-    enter-active-class="animate__tada"  // 指定进入动画（去animate.css官网复制）
-    leave-active-class="animate__bounceOutUp" // 指定退出动画 （去animate.css官网复制）
+        appear 
+        enter-active-class="animate__tada"  // 指定进入动画（去animate.css官网复制）
+        leave-active-class="animate__bounceOutUp" // 指定退出动画 （去animate.css官网复制）
     >
       <h1 v-show="isShow" key="1">这是vue动画1</h1>
       <h1 v-show="isShow" key="2">这是vue动画2</h1>
