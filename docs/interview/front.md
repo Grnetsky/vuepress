@@ -480,6 +480,13 @@ UI rendering/UI事件
 postMessage、MessageChannel
 setImmediate、I/O（Node.js）
 
+##### postMessage是什么?
+跨域通信的对象
+```js
+// TODO 待补充
+```
+
+
 ##### 浏览器页面渲染的流程是什么（输入url后页面发生什么）？
 大概分为：
 ###### 1.解析DNS（根据域名找ip地址）
@@ -548,6 +555,8 @@ nextTick表示 在下一次DOM更新循环之后执行的延迟回调函数，�
 ##### promiseA+规范
 
 ##### 首屏优化
+1. ssr 服务端渲染 （next.js nuxt.js）对seo友好
+2. 
 
 ##### gzip
 
@@ -557,7 +566,11 @@ nextTick表示 在下一次DOM更新循环之后执行的延迟回调函数，�
 
 ##### vueRouter 几个守卫？和生命周期
 
-##### vue组件传值？
+##### vue组件通信？
+v-model ，.sync
+父子组件通信: props/$emit、$parent/$children、 provide/inject 、 ref/$refs 、$attrs/$listeners、slot
+兄弟组件通信: eventBus 、 vuex、 自己实现简单的 Store 模式
+跨级通信: eventBus、 Vuex、 自己实现简单的 Store 模式、 provide / inject 、 $attrs / $listeners
 
 ##### v-on能监听多个事件吗
 
@@ -594,9 +607,25 @@ watch没缓存支持异步
 迭代器加promise
 
 ##### 发布订阅和观察着模式的区别
+是否有
 
 ##### 前端模块化方案？
-CMD es module  AMD 
+原始模块  CommonJS esModule  AMD UMD
+原始模块：函数模块 （在vue中好像见过）
+AMD(Asynchronous module Definition)异步模块定义：浏览器不支持，要借助requireJs才支持
+```js
+//TODO 示例待补充
+```
+CommonJS:同步模块加载规范，主要是node中，require()
+```js
+
+```
+UMD(Universal Module Definition):通用模块加载规范，是对前三种的简单整合
+```js
+
+```
+ES Module：es6的新规范，浏览器已经支持
+
 ##### 浏览器缓存？
 协商缓存和强缓存
 ##### HTTP 1.0 1.1 2.0 3.0区别？
@@ -635,6 +664,16 @@ GET会产生一个TCP数据包，而POST会产生两个TCP数据包。
 6-8个，可以使用域名分片技术来巧妙的避开（不建议，消耗性能，会多开tcp链接）
 
 ##### vue生命周期函数？各函数有哪些特点？
+beforeCreate：
+created:
+beforeMount:
+Mounted:
+beforeUpdate:
+updated:
+beforeDestroy:
+destroyed:
+
+##### vue-router生命周期？
 
 
 ##### http的简单请求和复杂请求
@@ -860,3 +899,5 @@ BEM（block块 element元素 modifier修饰符）规范
 ##### 了解pwa吗
 
 ##### 关于promise汇总？
+
+##### jsBridge原理
