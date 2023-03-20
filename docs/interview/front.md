@@ -28,7 +28,7 @@ align-items: 设置侧轴上子元素的排列（设置每个子项）<br/>
 align-content: 设置侧轴上子元素的排列 将flex子项当做一个整体 只对多行起作用<br/>
 
 子项配置<br/>
-flex:子项占用的份数
+flex:子项占用的份数   ：简写形式 完整写法应该是
 align-self:控制自己在侧轴的排列方式
 order: 排序 默认为0
 flex-grow: 索取父容器的剩余空间  控制放大比例，默认0  
@@ -371,15 +371,102 @@ SubType.prototype.sayAge = function() {
 ```
 
 ##### defer 和 async 区别
+首先这两个属性只对有src属性的script标签生效
+两者都是浏览器在下载脚本同时解析和渲染文档
+defer 并行加载，在整个文档加载渲染后在DOMContentLoaded事件触发之前执行（有顺序）
+async 并行加载，尽早的执行脚本（无序），async请求回来的脚本会执行并会阻塞html的解析（若解析完后才资源才请求到则不阻塞解析）
 
 ##### prefetch 和 preload 区别
-
+preload 是提前将资源下载到缓存中，不执行，什么时候用什么时候执行文件（字体图标，css样式表等），尽早下载首屏需要的关键信息，从而提升页面渲染性能
+prefetch 是跟你在浏览器闲置状态下去下载或预取用户在不久的将来可能访问的文档，并静默提取到缓存中
+preload的设计初衷是为了尽早加载首屏需要的关键资源，从而提升页面渲染性能。
+目前浏览器基本上都具备预测解析能力，可以提前解析入口html中外链的资源，因此入口脚本文件、样式文件等不需要特意进行preload。
+但是一些隐藏在CSS和JavaScript中的资源，如字体文件，本身是首屏关键资源，但当css文件解析之后才会被浏览器加载。这种场景适合使用preload进行声明，尽早进行资源加载，避免页面渲染延迟。
+与preload不同，prefetch声明的是将来可能访问的资源，因此适合对异步加载的模块、可能跳转到的其他路由页面进行资源缓存；对于一些将来大概率会访问的资源，如优惠券列表的背景图、常见的加载失败icon等，也较为适用。
+**preload优先级大于prefetch**
 ##### 预加载和懒加载
+预加载就是通过提前获取资源到缓存中，需要的时候直接从缓存拿数据，加快渲染能力，优化用户体验，优先级preload>prefetch
+懒加载是图片传输到可视区域才加载出来。懒加载实现方法：
+1. 普通
+
 
 ##### 节流和防抖
-
+节流：一定时间内只触发一次
+```javascript
+function throttle(fun,second){
+    let timer = null
+    return function () {
+        if(timer)return 
+        timer = setTimeout(()=>{
+            fun()
+            timer = null
+        },second*1000)
+    }
+}
+```
+防抖：一定时间内只触发最后一次
+```javascript
+function antiShake(fun,t) {
+    let timer = null
+    return function(){
+        if(timer){clearTimeout(timer);timer = null}
+        timer = setTimeout(()=>{
+            fun()
+            timer = null
+        },t)
+    }
+}
+```
 ##### axios如何中断请求？xhr和fetch呢？promise能中断吗 若要中断要怎么做？
+###### axios中断请求：cancelToken（是由kevin smith提出）或者 AbortController
+```js
+//axios版本 0.22以上 用fetch取消请求方式
+const controller = new AbortController();
 
+axios.get('/foo/bar', {
+    signal: controller.signal
+}).then(function(response) {
+    //...
+});
+// 取消请求
+controller.abort()
+
+//axios版本 0.22以下 用canceltoken取消请求方式
+const CancelToken = axios.CancelToken;  // 本质是取消promise 
+const source = CancelToken.source();
+axios.get('/user/12345', {
+    cancelToken: source.token
+}).catch(function (thrown) {
+    if (axios.isCancel(thrown)) {
+        console.log('Request canceled', thrown.message);
+    } else {
+        // 处理错误
+    }
+});
+axios.post('/user/12345', {
+    name: 'new name'
+}, {
+    cancelToken: source.token
+})
+
+// 取消请求（message 参数是可选的）
+source.cancel('Operation canceled by the user.');
+
+```
+###### xhr取消：xhr.abort()
+###### fetch取消：通过AbortController/ AbortSignal
+```js
+let abortController = new AbortController()
+fetch("https://www.baidu.com",{signal:abortController.signal}).catch(()=>{
+    console.log("请求中断")
+})
+setTimeout(()=>abortController.abort(),1000)  // 取消请求
+```
+
+###### promise取消用扩展：cancelToken
+```js
+// TODO 暂留
+```
 ##### 哪些是宏任务哪些是微任务
 ###### 微任务
 promise.then
@@ -427,7 +514,7 @@ __if-none-match__ 浏览器向服务端发送请求头中包含此字段 值为�
 
 ###### 4.返回html字符串，浏览器解析html
 浏览器解析html步骤：
-1. 首先浏览器会开启一个预解析器去下载和解析css下载js，渲染主线程从头开始解析html构建为DOM树，遇见js（不带defer async）的会等到js执行完再解析html，同事与解析器解析css位CSSOM，
+1. 首先浏览器会开启一个预解析器去下载和解析css下载js，渲染主线程从头开始解析html构建为DOM树，遇见js（不带defer async）的会等到js执行完再解析html，同时与解析器解析css位CSSOM，
 （css不会阻塞html解析的原理，运行在不同线程中的）
 2. 将DOM和CSSOM合并，遍历DOM树的每个节点，然后计算每个节点的样式，此时相对单位变成绝对单位
 3. 根据DOM树计算布局（layout）信息，获取每个元素的几何信息
@@ -445,10 +532,18 @@ __if-none-match__ 浏览器向服务端发送请求头中包含此字段 值为�
 （这里又要拓展事件循环和单线程模型了，又要引出异步问题了宏任务微任务的概念了）
 到此为整个过程结束
 
+##### 哪些操作会造成回流？哪些操作会造成重绘？
+当渲染树中部分或者全部尺寸，结构发送变化的时候，浏览器会重新渲染部分或者全部文档的过程
+1. 对Dom元素进行几何属性进行修改
+2. 更改Dom树结构
+3. 获取某些特定的属性值：offsetWidth，offsetHeight，offsetTop，offsetLeft，scrollTop，scrollLeft，scrollWidth，scrollHeight，client系列和getComputedStyle方法
+即通过即时计算才能得到，浏览器就会去进行页面布局计算
 
 ##### 正侧表达式？
 
 ##### vue的$nextTick原理
+nextTick 是vue模仿浏览器单线程模型事件循环的实践方式
+nextTick表示 在下一次DOM更新循环之后执行的延迟回调函数，用于在修改数据后调用，获取更新后的DOM。
 
 ##### promiseA+规范
 
@@ -475,6 +570,16 @@ __if-none-match__ 浏览器向服务端发送请求头中包含此字段 值为�
 ##### 移动端适配？响应式布局？
 
 ##### 跨域问题？解决方案？
+编程不可访问性  UI可访问性
+跨域问题在哪儿？xhr请求不能跨域，
+双方同意的基础上 实现数据的可编程访问
+伪跨域：主域名一样，子域名不一样：设置document.domain相同
+
+跨域方案？
+第一类：带域名限制的：cors(添加响应头，白名单) ，iframe(或者window.open)+postMessage，websocket(不属于http协议所以无跨域问题)
+第二类：无法限制来访域名：jsonp（无法区分调用方），url传参和表单提交（可以通过document.refer限制），服务器代理
+第三类（绝对不能使用），window.name跨域（没有安全保障，可能会被窃听，不可弥补）
+
 
 ##### cookie session token 对比 应用场景
 
@@ -483,15 +588,17 @@ __if-none-match__ 浏览器向服务端发送请求头中包含此字段 值为�
 ##### keep-alive组件
 
 ##### computed 和 watch
-
+computed有缓存不支持异步
+watch没缓存支持异步
 ##### async await原理及其实现
+迭代器加promise
 
 ##### 发布订阅和观察着模式的区别
 
 ##### 前端模块化方案？
-
+CMD es module  AMD 
 ##### 浏览器缓存？
-
+协商缓存和强缓存
 ##### HTTP 1.0 1.1 2.0 3.0区别？
 ###### HTTP1.0
 默认使用短连接，没进行一次http请求都会创建一个tcp链接（消耗性能）
@@ -524,6 +631,232 @@ GET会产生一个TCP数据包，而POST会产生两个TCP数据包。
 对于GET方式的请求，浏览器会把http header和data一并发送出去，服务器响应200(返回数据);
 而对于POST，浏览器先发送header，服务器响应100 continue，浏览器再发送data，服务器响应200 ok(返回数据)。（根据浏览器厂商觉得 firefox就发送一次）
 
-
 ##### 浏览器最多支持同一个域名同时发送多少个请求？
 6-8个，可以使用域名分片技术来巧妙的避开（不建议，消耗性能，会多开tcp链接）
+
+##### vue生命周期函数？各函数有哪些特点？
+
+
+##### http的简单请求和复杂请求
+简单请求：
+复杂请求：会发送option预检请求
+
+##### 服务端主动推送几种方式?
+1. 轮询
+2. websocket
+3. sse（server-send-event）
+
+##### 了解typescript？
+###### interface 与 type区别
+
+##### 了解react?
+
+##### 如何冻结一个对象
+Object.seal(): 不允许增加删除属性 用Object.isSealed()判断
+Object.freeze()：比seal更严格 锁定对象 不允许修改属性Object.isFrozen()判断是否锁定
+
+##### proxy与Object.defineProperty()区别？？
+
+##### 如何让 （a===1 && a===2 && a===3）为true
+a为对象
+1.Object.defineProperty()
+2.重写toString()
+3.重写valueOf()
+
+##### toString 和 valueOf 区别
+都是对象自带属性，对于Date类型一般先调用toString，对于其他对象则先调用valueOf
+
+##### 常见网络攻击及其防御
+###### csrf
+防御方法
+###### xss
+防御方法：拒绝用户输入一切html元素（用innerText 或者 正则过滤用户输入的信息），在让web应用始终在一个iframe标签中并且设置sanbox为true
+
+##### pnpm yarn npm 区别
+
+
+##### localstorage安全问题
+
+##### vue常见优化手段
+1. v-for使用key
+2. 使用冻结对象 Object.freeze()
+3. 使用函数式组件
+4. 使用计算属性
+5. 非实时绑定的表单项
+6. 使用延迟装载
+
+##### v-for v-if 优先级？
+vue2中是v-for 优先于v-if
+Vue3是：v-if优先于v-for的  不能一起用 可能会报错 用 computed结合数组的filter使用
+
+##### X-Frame-Options? 
+设置该页面是否能被iframe标签使用
+
+##### iframe的sanbox？
+
+##### addEventListener的完整写法？
+dom.addEventListener("event",callback,{capture:true,once:true,passive:true})  capture:捕获阶段，once：调用一次自动移除事件，passive：事件处理程序永远不调用preventDefault()
+
+##### getBoundingClientRect()? elementFromPoint()?
+
+##### scrollIntoView()?
+
+##### offset系列 client系列 scroll系列 区别？
+
+##### vue-router原理？
+
+##### 结构化克隆？
+
+##### 了解fetch吗
+
+##### 箭头函数与普通函数区别？
+1. 没有自己的this（靠继承外部）（主要差别）
+2. 不能作为构造函数
+3. 没有argument
+4. 没有prototype属性
+5. 没有new.target
+
+##### localStorage 和 sessionStorage区别
+
+##### 深拷贝浅拷贝？
+
+##### cookie session jwt 区别？
+cookie是传递数据的载体
+
+sessionId是服务器保存的用户的身份
+
+token是由服务器生成 客户端保存 服务器经过加密算法解密后验证的过程
+
+##### 受控组件和非受控组件的区别
+在React中 受控组件依赖状态，非受控组件不受状态的控制
+##### es6有哪些新语法
+1. 引入 class 类
+2. 模块化 esModule
+3. 箭头函数
+4. 形参默认值
+5. 模版字符串
+6. 解构赋值
+7. 新增set map对象
+8. 新增proxy 代理构造函数
+9. 迭代器生成器
+10. 新增symbol
+11. 新增api（isArray from of）
+12. Math新增api
+13. 新增 const，let 局部作用域
+
+##### 前端模块化？
+
+
+
+##### 如何影响浏览器对资源加载的优先级
+浏览器的资源优先级分为 Highest、High、Medium、Low、Lowest
+preload优先级大于prefetch
+###### 通过 preload（预加载）
+当浏览器“看”到这样的声明后，就会以一定的优先级在后台加载资源。加载完的资源放在HTTP缓存中。而等到要真正执行时，再按照正常方式用标签或者代码加载，即可从HTTP缓存取出资源。
+```html
+<link rel="preload" as="script" href="./important.js">
+<link rel="preload" href="https://tiven.cn/js/test.js" as="javascript" onload="preloadHandle()" crossorigin media="(max-width:350px)">
+<!--as 属性：告诉浏览器当前所要加载的资源类型-->
+<!--rel 属性设置为preload 将当前资源的优先级提高-->
+<!--onload 回调函数-->
+<!--跨源资源必须加上 crossorigin-->
+<!--media 媒体查询-->
+```
+若预加载加载的资源在3s内没有被当前页面所使用，则控制台会发出警告
+###### 预连接 (preconnect 和 dns-prefetch)
+网速较慢情况下建立网络连接比较耗时，若能提前建立好一个连接，会带来更流畅的体验
+```html
+<!--预连接-->
+<link rel="preconnect" href="https://esampel.com" crossorigin >
+
+<!--预解析dns  将解析后的dns缓存在系统中-->
+<link rel="dns-prefetch" href="http://www.baidu.com">
+```
+
+###### 预提取（prefetch）
+prefetch用来声明将来可能用到的资源，在浏览器空闲时进行加载。
+```html
+<link rel="prefetch" href="1.html">
+```
+（这还是有点不太懂）参考资料 [https://www.codenong.com/s1190000037794877/](https://www.codenong.com/s1190000037794877/)
+
+##### osi七层模型？tcp四层模型？那么五层模型是？
+
+##### 数组去重？
+1. set + 扩展运算符号
+```javascript
+let arr = [1,2,3,4,1,2,6]
+let result = [...new Set(arr)]
+```
+2. for循环遍历
+```javascript
+let arr = [1,2,3,4,1,2,6]
+let result = []
+arr.forEach((item)=>{
+    if (!result.includes(item))result.push(item)
+})
+console.log(result)
+```
+3. sort相邻去重
+```javascript
+let arr = [1,2,3,4,1,2,6,6]
+arr.
+arr.sort() // 排序
+for (let i = 0;i<arr.length-1;i++){
+    if(arr[i] === arr[i+1])arr.splice(i,1)
+}
+console.log(arr)
+```
+4. 其他方法去重 
+与方法2类似，不过是通过indexOf，find，findIndex方法来判断的
+
+
+##### 左侧固定，右侧自适应怎么做？
+1. 左侧float，右侧margin-left
+2. 左侧float，右侧 overflow：hidden 触发bfc
+3. 左侧position：absolute，右侧margin-left
+4. flex布局
+
+
+##### for循环，for of， for in，Array.prototype.forEach 区别？
+```javascript
+let arr = [ ,1,2,3,4,1,123,13] // 稀疏数组
+
+// for 是实时的 length回不断变长
+for(let i = 0 ;i<arr.length;i++){
+    arr.push(i)
+}
+
+// for of 不会跳过稀疏元素，实时的，用来遍历可迭代数据
+for(let i of arr){
+    arr.push(i)
+}
+
+// foeEach会跳过稀疏元素，非实时的
+arr.forEach((item)=>{
+    console.log(item)
+    arr.push(item)
+})
+
+// for in 是遍历对象属性的 遍历对象的可枚举属性包括继承的可枚举属性
+```
+
+##### 数组哪些操作会影响原数组？
+push,pop,shift,unshift,splice,fill,copyWithin,sort,reverse
+
+##### css命名规范？
+BEM（block块 element元素 modifier修饰符）规范
+1. 中画线（-）为每个单词的连接符，表示元素名字的多个单词的连接符
+2. 单下划线（_）表示一个元素的状态
+3. 双下划线（__）表示用于连接父元素和子元素
+父元素选择器__子元素名_状态-n 
+```css
+/*表示.myList 类下的item的状态为small-10*/
+.myList__item_small-10 {...}
+```
+
+##### 浏览器垃圾回收方式？
+
+##### 了解pwa吗
+
+##### 关于promise汇总？
