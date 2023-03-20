@@ -1,0 +1,38 @@
+// ==UserScript==
+// @name         学习通考试专用（暂时只支持选择题）
+// @namespace    http://tampermonkey.net/
+// @version      1.0
+// @description  try to take over the world!
+// @author       蔡豪
+// @match        https://www.tampermonkey.net/scripts.php
+// @match        https://mooc1.chaoxing.com/exam/test/*
+// @icon         https://www.iconfinder.com/icons/1844707/download/ico/4096
+// @grant        none
+// ==/UserScript==
+
+(function() {
+    'use strict';
+ var script = document.createElement("script")
+    script.setAttribute("src","https://code.jquery.com/jquery-3.6.0.min.js")
+    document.querySelector("html").appendChild(script)
+   var text = document.querySelector(".mark_name").lastChild.textContent
+   $.ajax({
+        url: "https://cx.icodef.com/v2/answer",
+        data:{"topic": text,"token":"CATgqUTYEiANhObK"},
+        async: true,
+        type: 'post',
+        dataType: 'json',
+        crossDomain: true, //最重要的地方，为true表示强制跨域，或者使用jsonp: "jsoncallback",
+        // jsonp: "jsoncallback",
+        success:function(val) {
+             console.log(val[0].result[0].correct)
+            let answer = val[0].result[0].correct
+            answer.forEach((item,index,arrary)=>{
+            let x =  $("div:contains("+`'${item.content}'`+")").eq(-1).css({ border: "2px solid red"})
+           console.log(x)})
+        },
+        error:function() {
+             console.log("出错了")
+        }
+    })
+})();

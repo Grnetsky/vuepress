@@ -1,0 +1,387 @@
+// ==UserScript==
+// @name         超星测验搜题v1.2
+// @namespace    http://tampermonkey.net/
+// @version      1.2
+// @description  超星作业刷题插件 支持新版本超星（暂不支持图片题目）
+// @author       蔡豪
+// @include      https://mooc1.chaoxing.com/mooc2/work/*
+// @include      https://mooc1-1.chaoxing.com/work/*
+// @include      https://mooc1.chaoxing.com/work/*
+// @include      https://www.icourse163.org/spoc/learn/*
+// @include      https://www.icourse163.org/learn/*
+// @icon         https://www.iconfinder.com/icons/1844707/download/ico/4096
+// @grant        none
+// ==/UserScript==
+
+(function() {
+    var script = document.createElement("script")
+    script.setAttribute("src","https://code.jquery.com/jquery-3.6.0.min.js")
+    document.querySelector("html").appendChild(script)
+    var outBtn = document.createElement("input")
+
+    outBtn.type = 'button'
+    outBtn.value = '点击开启脚本'
+    outBtn.style.position = "fixed";
+    outBtn.style.top = '150px'
+    outBtn.style.left = '100px';
+    outBtn.style.cursor = "pointer"
+    document.body.appendChild(outBtn)
+   var isOpen = false
+   function local_cutstr(str,len){
+var str_length = 0;
+
+var str_len = 0;
+
+var str_cut = new String();
+
+str_len = str.length;
+
+for(var i = 0;i<str_len;i++){
+var a = str.charAt(i);
+
+str_length++;
+
+if(escape(a).length > 4){
+//中文字符的长度经编码之后大于4
+
+str_length++;
+
+}
+
+str_cut = str_cut.concat(a);
+
+if(str_length>=len){
+str_cut = str_cut.concat("");
+
+return str_cut;
+
+}
+
+}
+
+//如果给定字符串小于指定长度，则返回源字符串；
+
+if(str_length<len){
+return str;
+
+}
+
+};
+outBtn.onclick = function(){
+
+    if(isOpen){
+        outBtn.value = "点击开启脚本"
+        document.querySelector("#answer").innerHTML = '已关闭'
+
+               isOpen = false
+
+return false
+
+              }
+    if(!isOpen){
+
+    isOpen = true
+         outBtn.value = "点击关闭脚本"
+
+
+    //var selector= window.prompt("请输入题目结点选择器")
+    var choose = prompt("请输入数字选择模式：1：超星作业；2：mooc测验题；3：自定义节点题搜索；4：手动输入题目查询；5：网点自助查询")
+    //题目列表
+    var titleList=[]
+    var plist
+    //答案列表
+    var answer = [];
+    var selector=''
+    var version = 1 //超星新版
+    var location
+    var alert_list = ''
+if(choose === '5'){
+window.open("https://cx.icodef.com/query.html?")
+}
+//超星模式
+if(choose==='1'){    if (document.querySelectorAll(".Zy_TItle p:first-child").length !==0){
+        plist=document.querySelectorAll(".Zy_TItle p:first-child");version=0;console.log(plist)}
+
+    else if(document.querySelectorAll(".mark_name").length!==0){
+        plist= document.querySelectorAll(".mark_name");
+        version=1;console.log(plist)}
+
+    else{alert("未获取到题目")}}
+//mooc模式（未完成）
+if(choose==='2'){
+    var Myscript = document.createElement('script')
+    Myscript.src = "https://code.jquery.com/jquery-3.6.0.min.js";
+    document.head.appendChild(Myscript)
+    plist = document.querySelectorAll("div[class*='f-richEditorText j-richTxt']");
+                 for(let i=0;i<plist.length;i++){
+                     let str = plist[i].innerText.replace(/\ +/g,'')
+                     str = str.replace(/[\r\n]/g,'')
+                titleList.push(str)}
+                console.log(titleList)
+                }
+
+
+// 自定义节点模式
+if(choose==='3'){
+    selector = prompt("输入文本节点选择器");plist=document.querySelectorAll(selector), location= prompt("请输入文字节点所在位置");location=parseInt(location);
+    plist = document.querySelectorAll(selector);console.log(plist);
+
+    try{plist[0].childNodes[location].nodeType}
+
+    catch(err){alert("该节点下暂无题目，请检查节点输入是否正确");return}
+
+    for (let i=0;i<plist.length;i++){
+
+    titleList.push(plist[i].childNodes[location].data);}
+
+                }
+
+//手动输入模式
+if(choose === '4'){
+    var answer_option
+    var answer_detail
+    var answer_list
+alert("请输入题目，支持多题搜索，格式为 ['题目1'，'题目2'，...]")
+ document.querySelector("html").insertAdjacentHTML(
+        "beforeEnd",'<div id="inputDiv" style="position:fixed;top:20%;left:50%;transform:translate(-50%,-50%);font-size:20px"><input id="title" placeholder="请输入题目列表" style="min-width:10rem;height:2rem;border:2px solid black;font-size:20px;border-radius:3px;box-shadow:0 1 0 rgba(0,0,0,.4)">  <button id="submitBtn">提交</button></div>'
+ )
+document.querySelector("#submitBtn").onclick = function(){
+     document.querySelector("html").insertAdjacentHTML(
+        "beforeEnd",'<div id="answer2"style="min-width:100px;max-height:500px;background-color:transparent;position:fixed;top:200px;left:100px;color:tomato;overflow:auto;transition:all .5s">答案列表</div>')
+
+    titleList = eval(document.querySelector("#title").value)
+                                                          console.log(titleList.length)
+
+                                                          for(let i=0;i<titleList.length;i++){(function(t){
+                                                                      console.log(titleList[i]);setTimeout(function(){
+                                                                           $.post(
+                "https://cx.icodef.com/v2/answer",
+                {"topic":titleList[i],"token":"CATgqUTYEiANhObK"},
+                function(val){
+                    try{
+                        val[0].result[0].correct
+                    }
+                //无答案
+                    catch(err){
+                        answer.push([{option:"无答案",content:"题库未查询到"}])
+                    }
+                    answer.push(val[0].result[0].correct);
+
+                }
+                                                                           )
+        }
+
+
+        ,
+                1000*t)})(i)}
+
+                                          setTimeout(function(){
+                                              console.log(answer)
+
+                                          answer.forEach(function(dom,i){answer_option = dom[0].option
+                                           answer_detail = dom[0].content
+                                           answer_list = "第"+(i+1)+"题答案： "+answer_option+"详情为："+answer_detail
+                                          alert_list += answer_list
+                                          var answer_item2 = document.createElement("p")
+
+                                          answer_item2.innerHTML ="第"+(i+1)+"题答案： "+answer_option+" 详情为："+answer_detail
+                                          document.querySelector("#answer2").appendChild(answer_item2)
+
+
+                                                                        })
+                                          //渲染答案区域
+
+
+ var btn = document.createElement("div")
+
+    document.querySelector("html").appendChild(btn)
+
+
+
+
+// 隐藏按钮样式及其功能实现
+
+ btn.style.minWidth = '50px',
+ btn.style.minHeight = '20px',
+ btn.style.backgroundColor = 'tomato',
+ btn.style.position = 'fixed',
+ btn.style.top = '172px',
+ btn.style.left = '100px',
+ btn.style.borderRadius = '2px',
+ btn.style.textAlign = 'center',
+ btn.style.cursor = 'pointer',
+ btn.style.userSelect = "none"
+ btn.innerText = "点击显示或隐藏"
+    var flag = true
+ btn.onclick = function(){
+
+     let answer_div = document.querySelector("#answer2")
+if(flag){
+answer_div.style.display = 'none';
+    flag = false
+}
+
+else{
+answer_div.style.display = "block"
+    flag=true
+}
+
+ }//隐藏按钮
+
+
+
+                                              //渲染答案结束
+
+                                              alert_list = []
+                                              answer = []
+
+                                          }
+                                          ,1100*titleList.length)
+
+                                                          }
+}
+
+
+//超星模式新老版本验证并写入题目
+if(choose=='1'){
+     try{plist[0].childNodes[0].nodeType === 3 && plist[0].childNodes[2].nodeType === 3;console.log("2正常")}
+    catch(err){version = false;console.log("2出现错误")};console.log("2继续");
+
+    if(version){
+        for (let i=0;i<plist.length;i++){
+
+            titleList.push(plist[i].childNodes[2].data);}}
+
+   else{ for (let i=0;i<plist.length;i++){
+            titleList.push(plist[i].childNodes[0].data)}}}
+
+
+
+
+  //查询题目模块（公用）
+    for(let i=0;i<titleList.length;i++){(function(t){
+        //显示获取的题目
+        console.log(titleList[i]);setTimeout(function(){
+            //ajax请求
+
+           if(choose==='1' || choose==='3'||choose === '4'){
+               if(!isOpen){return false}
+               $.post(
+                "https://cx.icodef.com/v2/answer",
+                {"topic":titleList[i],"token":"CATgqUTYEiANhObK"},
+                function(val){
+                    try{
+                        val[0].result[0].correct
+                    }
+                //无答案
+                    catch(err){
+                        answer.push([{option:"无答案",content:"题库未查询到"}])
+                    }
+                    answer.push(val[0].result[0].correct);console.log(answer) ;
+                })
+
+      }
+
+
+        if(choose === '2'){
+            var str = local_cutstr(titleList[i],30)
+            console.log(str)
+                         $.ajax({
+        url: "https://cx.icodef.com/v2/answer",
+        data:{"topic": str,"token":"CATgqUTYEiANhObK"},
+        async: true,
+        type: 'post',
+        dataType: 'json',
+        crossDomain: true, //最重要的地方，为true表示强制跨域，或者使用jsonp: "jsoncallback",
+        // jsonp: "jsoncallback",
+        success:function(val) {
+             try{
+                        val[0].result[0].correct
+                    }
+                //无答案
+                    catch(err){
+                        answer.push([{option:"无答案",content:"题库未查询到"}])
+                    }
+                    answer.push(val[0].result[0].correct);console.log(answer) ;
+
+        },
+        error:function() {
+             console.log("出错了")
+        }
+    });
+        }
+
+}
+
+
+        ,
+                1000*t)})(i)}
+
+    document.querySelector("html").insertAdjacentHTML(
+        "beforeEnd",'<div id="answer"style="max-width:1000px;max-height:500px;background-color:transparent;position:fixed;top:200px;left:100px;color:tomato;overflow:scroll;transition:all .5s"></div>')
+document.querySelector("#answer").innerHTML = '搜索中...'
+    //取出答案 渲染答案到页面
+
+    setTimeout(function(){
+
+     if(!isOpen){return false}
+        document.querySelector("#answer").innerText = "搜索完成!"
+
+        answer.forEach(function(dom,i){
+
+        var endanswer=''
+
+        var detailanswer = ''
+
+        for(let i=0;i<dom.length;i++){
+            endanswer+=dom[i].option;detailanswer+=dom[i].content+' '}
+
+     var answer_item = document.createElement("p")
+
+     answer_item.innerHTML =(i+1)+": "+"答案："+endanswer+" 详情："+detailanswer
+        console.log(dom[0])
+document.querySelector("#answer").appendChild(answer_item)
+    })
+                         },1100*titleList.length)
+
+
+
+
+
+// 隐藏按钮样式及其功能实现
+var btn = document.createElement("div")
+
+    document.querySelector("html").appendChild(btn)
+ btn.style.minWidth = '50px',
+ btn.style.minHeight = '20px',
+ btn.style.backgroundColor = 'tomato',
+ btn.style.position = 'fixed',
+ btn.style.top = '172px',
+ btn.style.left = '100px',
+ btn.style.borderRadius = '2px',
+ btn.style.textAlign = 'center',
+ btn.style.cursor = 'pointer',
+ btn.style.userSelect = "none"
+ btn.innerText = "点击显示或隐藏"
+ btn.id = "showDiv"
+    var flag = true
+ btn.onclick = function(){
+
+     let answer_div = document.querySelector("#answer")
+if(flag){
+answer_div.style.display = 'none';
+    flag = false
+}
+
+else{
+answer_div.style.display = "block"
+    flag=true
+}
+
+ }//隐藏按钮
+
+
+    }}//开关
+
+
+})();
