@@ -121,6 +121,7 @@ bfc(block formatting contexts 格式化上下文) 是页面中的一块渲染区
 行内块元素（元素的 display 为 inline-block）
 表格单元格（元素的 display 为 table-cell，HTML表格单元格默认为该值）
 表格标题（元素的 display 为 table-caption，HTML表格标题默认为该值）
+display:flex
 匿名表格单元格元素（元素的 display 为 table、``table-row、 table-row-group、``table-header-group、``table-footer-group（分别是HTML table、row、tbody、thead、tfoot 的默认属性）或 inline-table）
 overflow 计算值(Computed)不为 visible 的块元素
 display 值为 flow-root 的元素
@@ -547,10 +548,21 @@ __if-none-match__ 浏览器向服务端发送请求头中包含此字段 值为�
 即通过即时计算才能得到，浏览器就会去进行页面布局计算
 
 ##### 正侧表达式？
+```js
+// TODO 正则待补充
+```
+
 
 ##### vue的$nextTick原理
+nextTick是等待下次dom更新刷新的工具方法
 nextTick 是vue模仿浏览器单线程模型事件循环的实践方式
-nextTick表示 在下一次DOM更新循环之后执行的延迟回调函数，用于在修改数据后调用，获取更新后的DOM。
+nextTick表示 并不是数据改变他视图就立即改变 而是异步更新 而是在下一次DOM更新循环之后执行的延迟回调函数，用于在修改数据后调用，获取更新后的DOM。
+vue是异步更新策略，数据发生变化，vue并不会立刻更新DOM，而是开启一个队列，把组件更新函数保存在队列中，放在nextTick中的函数会放在更新函数全部执行后执行。
+
+原理：将任务放在一个队列中，然后等待promise。then方法，
+
+##### 如何在created中获得dom元素？
+在created中用nextTick()
 
 ##### promiseA+规范
 
@@ -558,11 +570,50 @@ nextTick表示 在下一次DOM更新循环之后执行的延迟回调函数，�
 1. ssr 服务端渲染 （next.js nuxt.js）对seo友好
 2. 
 
-##### gzip
+##### gzip(基于deflate压缩算法)
+Gzip 是一种用于文件压缩与解压缩的文件格式。它基于 Deflate 算法，可将文件（译者注：快速地、流式地）压缩地更小，
+从而实现更快的网络传输。Web 服务器与现代浏览器普遍地支持 Gzip，这意味着服务器可以在发送文件之前自动使用 Gzip 压缩文件，
+而浏览器可以在接收文件时自行解压缩文件。
+启用方式:浏览器发送请求到服务器，服务器根据请求头中的Accept-Encoding字段判断该浏览器是否支持Gzip压缩。如果不支持，
+则只响应未经压缩的资源即可；如果支持，则进入后续流程。
 
 ##### 强缓存和协商缓存
 
+
 ##### 常见状态码
+###### 100系列
+100：continue 
+101：协议切换
+
+###### 200系列
+200：ok请求成功
+201：请求被创建
+202：请求已经被接受，但服务器无响应
+203：包含的信息不是来自服务器
+204：无实体部分
+205：告知浏览器清除当前页面所有表单元素
+
+###### 300系列
+300：有多个对应的资源，返回列表可选择。
+301：永久重定向
+302：临时重定向
+303：对重定向由浏览器自动从post转为get
+304：未修改，从缓存中读取
+307：对重定向由用户决定是否重新发起post请求
+###### 400系列
+400：客户端请求错误
+401：未认证
+402：暂时保留的状态码
+403：禁止访问
+404：找不到该资源
+405：请求方法不被允许
+408：超时
+413：资源太大，服务端处理不了
+###### 500系列
+500：服务端出现逻辑错误
+501：超出服务器处理范围能力以内（请求方法不支持等）
+502：网关错误
+503：服务器暂时没能力处理请求（未来可能可以）
 
 ##### vueRouter 几个守卫？和生命周期
 
@@ -573,14 +624,30 @@ v-model ，.sync
 跨级通信: eventBus、 Vuex、 自己实现简单的 Store 模式、 provide / inject 、 $attrs / $listeners
 
 ##### v-on能监听多个事件吗
+可以，对象形式
 
 ##### vuex相关
+vuex的重要些，vue期待一种简单的单项数据流的管理方式，当遇到多个组件共享式状态时，数据流的简洁性会被破坏，此时就有必要把共享状态抽取出来，
+用一个全局单例模式去管理，通过定义和隔离状态管理中的各种概念必过通过强制规则维持视图和状态间的独立性，代码会变得更加简洁且易维护，这也是vuex和
+redux这类状态管理工具的必要性
+有 state，mutation，action，getter，module
+
+##### vue的最佳实践
+1. 编码风格
+2. 性能方面
+
+##### 说说从template到render的处理的过程
+vue有个对的编译器模块，叫"compiler",主要作用是讲用户编写的template编译为js中可执行的render函数，而且在编译中，可以发现代码哪些变量是动态的
+哪些是静态的，从而对后面只处理动态的部分，diff算法时可以减少节点。编译器执行会对template进行编译（正则表达式），称为parse，变成ast抽象语法树（js对象）
+在将AST进行深度加工，叫做transform，最后生成js代码，也叫render函数。
+结束之后会得到js对象，
 
 ##### 如何解决异步请求竞态问题？
 1.发送新请求时取消上次请求即可
 2.忽略过期请求
 
 ##### 移动端适配？响应式布局？
+
 
 ##### 跨域问题？解决方案？
 编程不可访问性  UI可访问性
@@ -591,23 +658,28 @@ v-model ，.sync
 跨域方案？
 第一类：带域名限制的：cors(添加响应头，白名单) ，iframe(或者window.open)+postMessage，websocket(不属于http协议所以无跨域问题)
 第二类：无法限制来访域名：jsonp（无法区分调用方），url传参和表单提交（可以通过document.refer限制），服务器代理
-第三类（绝对不能使用），window.name跨域（没有安全保障，可能会被窃听，不可弥补）
+第三类（绝对不能使用），window.name跨域（没有安全保障，可能会被窃听，不可弥https
+补）
 
 
 ##### cookie session token 对比 应用场景
+cookie是浏览器
 
 ##### 介绍下websocket协议
-
+支持浏览器与服务器进行全双工通信的协议，属于应用层协议，基于tcp协议，复用了http的握手通道，弥补http协议的持久通信上的能力的不足，通过http协议握手，无跨域问题
 ##### keep-alive组件
 
 ##### computed 和 watch
-computed有缓存不支持异步
-watch没缓存支持异步
+computed：会有个项响应式的返回值，由组件数据派生出数据，是懒加载（用户使用的时候才去计算）有缓存（用dirty标识符，不会重复执行计算，节省性能），不支持异步，即可读又可写
+watch：侦测变化执行回调，没缓存支持异步，有deep和immediate选项
+vue3中watch有变化，不能能这侧一个点操作符以外的字符串表达形式
+watchEffect：回调函数里的变量用到谁就监视谁，一旦变化重新执行回调，类似computed但更注重过程
+
 ##### async await原理及其实现
 迭代器加promise
 
 ##### 发布订阅和观察着模式的区别
-是否有
+是否有调度中心
 
 ##### 前端模块化方案？
 原始模块  CommonJS esModule  AMD UMD
@@ -628,6 +700,12 @@ ES Module：es6的新规范，浏览器已经支持
 
 ##### 浏览器缓存？
 协商缓存和强缓存
+
+###### 强缓存（expires，cache-control）
+expires是http1.0中声明的控制缓存失效日期的时间戳字段，由服务端指定后通过响应头来告知
+
+
+
 ##### HTTP 1.0 1.1 2.0 3.0区别？
 ###### HTTP1.0
 默认使用短连接，没进行一次http请求都会创建一个tcp链接（消耗性能）
@@ -642,7 +720,13 @@ ES Module：es6的新规范，浏览器已经支持
 （关键词：多路复用 二进制帧 主动推送 头部压缩 优先级）
 ###### HTTP3.0
 放弃tcp 使用基于udp的QUIC来实现
+
+
 ##### 了解HTTPS（HTTP+SSL）吗？
+非对称加密和对称加密的混合方法
+通过ca机构颁发证书
+![img_2.png](img_2.png)
+
 
 ##### get和post区别
 ###### 一般区别
@@ -674,7 +758,18 @@ beforeDestroy:
 destroyed:
 
 ##### vue-router生命周期？
-
+导航被触发。
+在失活的组件里调用 beforeRouteLeave 守卫。
+调用全局的 beforeEach 守卫。
+在重用的组件里调用 beforeRouteUpdate 守卫 (2.2+)。
+在路由配置里调用 beforeEnter。
+解析异步路由组件。
+在被激活的组件里调用 beforeRouteEnter。
+调用全局的 beforeResolve 守卫 (2.5+)。
+导航被确认。
+调用全局的 afterEach 钩子。
+触发 DOM 更新。
+调用 beforeRouteEnter 守卫中传给 next 的回调函数，创建好的组件实例会作为回调函数的参数传入。
 
 ##### http的简单请求和复杂请求
 简单请求：
@@ -691,10 +786,12 @@ destroyed:
 ##### 了解react?
 
 ##### 如何冻结一个对象
-Object.seal(): 不允许增加删除属性 用Object.isSealed()判断
-Object.freeze()：比seal更严格 锁定对象 不允许修改属性Object.isFrozen()判断是否锁定
+Object.preventExtensions 不允许给自身添加属性（可以给原型添加属性，但是不能修改原型的数据）
+Object.seal(): 不允许增加删除自有属性 用Object.isSealed()判断
+Object.freeze()：比seal更严格 锁定对象 不允许修改添加自有属性，访问器方法（set，get不会受到影响）Object.isFrozen()判断是否锁定
 
 ##### proxy与Object.defineProperty()区别？？
+proxy是es6新提出的代理对象，能够劫持所有行为，相比较Object.defineProperty
 
 ##### 如何让 （a===1 && a===2 && a===3）为true
 a为对象
@@ -764,7 +861,7 @@ cookie是传递数据的载体
 
 sessionId是服务器保存的用户的身份
 
-token是由服务器生成 客户端保存 服务器经过加密算法解密后验证的过程
+token是由服务器生成 客户端保存 服务器经过加密算法解密后验证的过程 头部：算法  载体：信息  签名（服务端用头部和信息和私钥加密成的字符串）
 
 ##### 受控组件和非受控组件的区别
 在React中 受控组件依赖状态，非受控组件不受状态的控制
@@ -782,10 +879,6 @@ token是由服务器生成 客户端保存 服务器经过加密算法解密后�
 11. 新增api（isArray from of）
 12. Math新增api
 13. 新增 const，let 局部作用域
-
-##### 前端模块化？
-
-
 
 ##### 如何影响浏览器对资源加载的优先级
 浏览器的资源优先级分为 Highest、High、Medium、Low、Lowest
@@ -820,7 +913,8 @@ prefetch用来声明将来可能用到的资源，在浏览器空闲时进行加
 （这还是有点不太懂）参考资料 [https://www.codenong.com/s1190000037794877/](https://www.codenong.com/s1190000037794877/)
 
 ##### osi七层模型？tcp四层模型？那么五层模型是？
-
+osi：物理层，数据链路层，网络层，传输层，会话层，表示层，应用层
+tcp/ip：网络接口层，网际层，传输层，应用层
 ##### 数组去重？
 1. set + 扩展运算符号
 ```javascript
@@ -849,12 +943,21 @@ console.log(arr)
 4. 其他方法去重 
 与方法2类似，不过是通过indexOf，find，findIndex方法来判断的
 
-
 ##### 左侧固定，右侧自适应怎么做？
 1. 左侧float，右侧margin-left
 2. 左侧float，右侧 overflow：hidden 触发bfc
 3. 左侧position：absolute，右侧margin-left
 4. flex布局
+
+##### 两边固定中间自适应怎么做？
+1. flex ：flex-basis设置两边宽度，中间设置flex：1
+2. float+calc()
+3. position定位
+核心：将父元素设置为position:relative；（相对定位）
+子元素设置为绝对定位position:absolute；
+左边列(固定宽度)：position:absolute; left:0;
+中间列（自适应列）:position:absolute; left:(左边列的宽度);right:(右边列的宽度)
+右边列（固定宽度）：position:absolute;right:0;
 
 
 ##### for循环，for of， for in，Array.prototype.forEach 区别？
@@ -895,9 +998,151 @@ BEM（block块 element元素 modifier修饰符）规范
 ```
 
 ##### 浏览器垃圾回收方式？
-
+最常用：标记清理，当变量进入上下文中时变量会被加上存在上下文中的标记，
+不常用：引用计数：对每个值都记录他的被引用的次数（严重问题：循环引用）
 ##### 了解pwa吗
+
 
 ##### 关于promise汇总？
 
 ##### jsBridge原理
+js调用native：通过webview提供的接口，向其中注入对象，让js调用
+native调用js：evaluateJavascript方法指定函数名，有回调
+##### flex是哪些的缩写？
+flex：flex-grow flex-shrink flex-basis
+
+##### 并行请求？
+
+##### 小数相加精度消失问题？
+
+##### require和import区别
+运行时，编译时
+
+##### 父子组件及其mixins生命周期执行顺序？
+mixin的beforeCreate > 父beforeCreate > mixin的created > 父created > mixin的beforeMount > 父beforeMount > 子beforeCreate > 子created > 子beforeMount > 子mounted > mixin的mounted >父mounted
+
+##### 虚拟列表？
+
+##### git常见命令
+
+##### webpack配置？
+###### webpack有哪些配置？
+entry：输入
+output：输出
+module(rules)：loader
+plugins：插件
+mode: 模式
+##### 如何用es5的函数模仿es6的class的constructor？
+
+1. 严格模式下
+2. 
+
+##### css中的animation?
+
+
+##### 在立即执行函数中执行 var x = y = 1 在全局作用域中会发生什么?
+是从右往左赋值，解释为y=1(为临时全局变量) var x = y 为函数的局部变量
+
+##### 生成指定范围的随机数
+Math.random()*(max-min)+min
+
+
+##### @import css
+
+##### mvc和mvvm，mvp，MTV区别
+三种软件架构模式
+mvc:view
+mvvm:只关注数据结构
+mvp：
+
+##### requestAnimationFrame
+在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率
+取消:cancelAnimationFrame
+
+##### vue常用指令？
+v-once v-model v-html v-text v-memory v-on v-show v-if v-else 
+##### vue长列表优化思路
+1. 采取分页
+2. v-once
+3. v-memo缓存
+4. 虚拟滚动
+5. 懒加载
+
+##### 如何监听Vuex的状态的变化
+1. watch (首选)
+2. store.subscribe(cb)（写起来繁琐）
+##### vue-router有几种模式？
+三种：hash，history，memory
+
+
+##### vue权限管理？
+1. 页面权限
+RBAC存在服务器、路由信息在前端配置通过addRoute设置（动态路由生成）
+2. 按钮权限
+实现 v-permission命令 看是否有权限
+
+##### 对vue响应式的理解vue2与vue3区别？，与react的响应式的区别
+proxy：懒处理（避免了defineProperty的递归），性能高，方便，（兼容性差）
+React基于状态机，手动优化，数据不可变（react偏向数据不可变），需要setState驱动新的state替换老的state。
+当数据改变时，以组件为根目录，默认全部重新渲染, 所以 React 中会需要 shouldComponentUpdate 这个生命周期函数方法来进行控制
+
+
+##### vue的diff算法？
+借助了snabdom
+递归过程，深度优先，同层比较
+要分很多情况，文本
+vue2是双端diff算法
+vue3是快速diff算法
+
+##### js判断数据类型？
+1. typeof
+2. instanceof
+3. constructor
+4. Object.property.toString.call()
+
+##### vue和react相同点和区别
+相同：数据驱视图，组件化，vdom
+两者核心思想不同：
+写法不同：
+diff算法不同
+响应式原理不同：vue依赖收集，自动优化，数据可变，数据变化自动找到组件重新渲染，React基于状态机，手动优化，
+数据不可变，需要setState驱动新的state替换老的state。当数据改变时，以组件为根目录，默认全部重新渲染, 
+所以 React 中会需要 shouldComponentUpdate 这个生命周期函数方法来进行控制
+源码差异
+
+##### axios二次封装？
+
+##### Vue中的render函数？
+在Vue中，我们通常使用template和JSX语法来创建组件的DOM结构。但是，在某些情况下，我们需要更细粒度的控制组件的渲染过程，这时就可以使用render函数。
+Vue中的render函数是用于将组件转换为虚拟DOM的JavaScript函数，它的作用可以概括为以下几点：
+将组件的模板转换为虚拟DOM结构：在Vue中，组件的模板可以是template或JSX语法，而render函数可以将组件的模板转换为Virtual DOM对象，
+这样便可以在组件中对DOM结构进行更加细致的控制和操作，实现更加灵活的组件渲染。
+自定义组件的渲染逻辑：在Vue中，每个组件都有自己的渲染函数，这使得我们可以在组件内部自定义渲染逻辑，例如根据组件的状态、属性、插槽等来动态生成组件的DOM结构。
+提高组件渲染性能：使用render函数可以在渲染过程中避免生成大量的中间VNode对象，从而提高组件的渲染性能。
+需要注意的是，render函数也需要遵循一定的规则和语法，例如render函数必须返回一个VNode对象，不能直接操作DOM，等等。因此，在使用render函数时需要注意相关的语法和规则。
+
+##### flex和inline-flex区别
+flex默认是独占一行的，inline-flex是和inline元素类似的flex形式
+
+
+##### 如何理解Function.prototype === Function.__ proto __  为true
+因为Function本身也是一个Function对象，也就是var Function = new Function()，这看起来有点鸡和蛋的意思，
+不过如果先给你一个蛋，那必然就是先有蛋后有鸡了。所以如果先给你一个Function对象的原形[[Prototype]]，
+那么就可以通过一个函数构建出Function的实例了，这个函数就是Function本身。
+
+##### 了解__proto __吗？
+__Proto __属性返回对象的原型对象，但是该方法有严重的性能问题，已经不被推荐使用，取而代之的是Object.getPropertyOf(object).
+
+
+##### babel和core.js?
+Babel和CoreJS有一定的联系，因为它们都是为了解决JavaScript兼容性问题而存在的工具。
+Babel可以将现代的JavaScript代码转换成向后兼容的代码，以便在较老版本的浏览器或其他环境中运行，但是它并没有提供对一些新的ES特性的polyfill。
+这就需要开发者手动引入polyfill库，而CoreJS正是其中一个常用的polyfill库，可以提供对许多新的ES特性的支持。
+另外，Babel也有可以与CoreJS进行集成的插件和预设，例如@babel/preset-env，它可以根据目标浏览器和Node.js版本，自动选择需要的Babel插件和CoreJS polyfill，
+从而简化了开发者的工作。
+因此，可以说Babel和CoreJS在解决JavaScript兼容性问题上是互相联系的。Babel提供了转换现代JS代码的能力，CoreJS提供了向低版本浏览器中引入新特性的能力。
+
+##### 如何生成真随机数
+```js
+window.crypto.getRandomValues()
+```
