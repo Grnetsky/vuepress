@@ -40,7 +40,7 @@ sidebar: auto
 :::
 
 ## 注意
-绑定的fatherVlue不能为表达式，也不能为显示的对象<br>
+绑定的fatherValue不能为表达式，也不能为显示的对象<br>
 例如
 ```html
 <son

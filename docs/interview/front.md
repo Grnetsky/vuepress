@@ -37,7 +37,7 @@ flex-shrink:默认1 flex-shrink 属性指定了 flex 元素的收缩规则，默
     flex-shrink 值。
 flex-basis: 设置具体大小  它的初始值是 auto，此时浏览器会检查元素是否设置了 width 属性值。
     如果有，则使用 width 的值作为 flex-basis 的值；如果没有，则用元素内容自身的大小。
-    如果 flex-basis 的值不是 auto，width 属性会被忽略
+    如果 flex-basis 的值不是 auto，width 属性会被忽略（权重比较高）
 
 2.margin:auto (需要高度)
 ```css
@@ -68,6 +68,7 @@ flex-basis: 设置具体大小  它的初始值是 auto，此时浏览器会检�
 4.绝对定位盒子居中 (明确知道自己的width)
 ```css
 .item {
+    position: absolute;
     left:50%;
     margin-left:-100px
 }
@@ -94,7 +95,6 @@ div {
     right: 0;
     bottom: 0;
     margin: auto;
-
 }
 ```
 
@@ -184,7 +184,7 @@ text {
 
 ##### new操作符做了些什么？
 1.创建一个空对象
-2.将该对象的原型指向构造函数
+2.将该对象的原型指向构造函数的原型对象
 3.将构建函数中的this绑定到新建的对象obj上
 4.根据构造函数的返回值，返回对象，如果值为非对象类型则返回obj对象若为对象类型则返回该对象
 ```js
@@ -531,7 +531,7 @@ __if-none-match__ 浏览器向服务端发送请求头中包含此字段 值为�
 6. 分块：将每一层分为多个小块（会开启合成线程做这个事，合成线程会开启线程池取多个线程处理）
 7. 光栅化：将每个块图变为位图（像素信息），优先处理靠近视图窗口的，开启gpu加速
 8. 画：将每个像素画在屏幕上，以及考虑到旋转缩放变形
-
+（计，布，层，绘，块，删，画）
 这里就要引出重绘和回流：
 回流：元素的几何信息改变，布局改变，会重新计算样式再重复上面的流程（从计算样式开始），会比较消耗性能，
 重绘：仅仅作用于最后一步（画）上，所以会很流畅，也不会被js操作阻塞（因为根本没运行在渲染主线程中，而是在合成线程中完成）
@@ -558,8 +558,7 @@ nextTick是等待下次dom更新刷新的工具方法
 nextTick 是vue模仿浏览器单线程模型事件循环的实践方式
 nextTick表示 并不是数据改变他视图就立即改变 而是异步更新 而是在下一次DOM更新循环之后执行的延迟回调函数，用于在修改数据后调用，获取更新后的DOM。
 vue是异步更新策略，数据发生变化，vue并不会立刻更新DOM，而是开启一个队列，把组件更新函数保存在队列中，放在nextTick中的函数会放在更新函数全部执行后执行。
-
-原理：将任务放在一个队列中，然后等待promise。then方法，
+原理：将任务放在一个队列中，然后等待promise.then方法，
 
 ##### 如何在created中获得dom元素？
 在created中用nextTick()
@@ -644,6 +643,9 @@ vue有个对的编译器模块，叫"compiler",主要作用是讲用户编写的
 
 ##### 如何解决异步请求竞态问题？
 1.发送新请求时取消上次请求即可
+```js
+
+```
 2.忽略过期请求
 
 ##### 移动端适配？响应式布局？
@@ -811,7 +813,7 @@ a为对象
 ##### pnpm yarn npm 区别
 
 
-##### localstorage安全问题
+##### localstorage安全问题?
 
 ##### vue常见优化手段
 1. v-for使用key
@@ -838,8 +840,14 @@ dom.addEventListener("event",callback,{capture:true,once:true,passive:true})  ca
 ##### scrollIntoView()?
 
 ##### offset系列 client系列 scroll系列 区别？
+offset:获取元素的位置大小等。获取元素举例带有定位父元素的位置，获取元素自身的大小（高度，宽度（包括padding，border）），返回值不带单位
+client:获取元素可视区的相关信息，通过client系列可以动态的到元素边框大小，元素大小等属性。
+ 
+
 
 ##### vue-router原理？
+三种模式：
+
 
 ##### 结构化克隆？
 
@@ -888,15 +896,15 @@ preload优先级大于prefetch
 ```html
 <link rel="preload" as="script" href="./important.js">
 <link rel="preload" href="https://tiven.cn/js/test.js" as="javascript" onload="preloadHandle()" crossorigin media="(max-width:350px)">
-<!--as 属性：告诉浏览器当前所要加载的资源类型-->
+<!--as 属性：告诉浏览器当前所要加载的资源类型--> audio document embed fetch font image script object style track video worker (webkit似乎禁用了video和audio的预加载和预提取)
 <!--rel 属性设置为preload 将当前资源的优先级提高-->
 <!--onload 回调函数-->
 <!--跨源资源必须加上 crossorigin-->
 <!--media 媒体查询-->
 ```
 若预加载加载的资源在3s内没有被当前页面所使用，则控制台会发出警告
-###### 预连接 (preconnect 和 dns-prefetch)
-网速较慢情况下建立网络连接比较耗时，若能提前建立好一个连接，会带来更流畅的体验
+###### WO
+
 ```html
 <!--预连接-->
 <link rel="preconnect" href="https://esampel.com" crossorigin >
@@ -1002,7 +1010,6 @@ BEM（block块 element元素 modifier修饰符）规范
 不常用：引用计数：对每个值都记录他的被引用的次数（严重问题：循环引用）
 ##### 了解pwa吗
 
-
 ##### 关于promise汇总？
 
 ##### jsBridge原理
@@ -1024,6 +1031,7 @@ mixin的beforeCreate > 父beforeCreate > mixin的created > 父created > mixin的
 ##### 虚拟列表？
 
 ##### git常见命令
+git
 
 ##### webpack配置？
 ###### webpack有哪些配置？
@@ -1035,7 +1043,12 @@ mode: 模式
 ##### 如何用es5的函数模仿es6的class的constructor？
 
 1. 严格模式下
-2. 
+2. 暂时性死区
+3. 必须使用new调用（new.target，或者this.__proto __ ===xxx.prototype ）
+4. 访问器 在 原型上和实例上都有且相同
+5. 访问器属性不可枚举
+6. 原型上的方法是不可枚举的
+7. 方法函数不能被被new调用
 
 ##### css中的animation?
 
@@ -1086,6 +1099,11 @@ proxy：懒处理（避免了defineProperty的递归），性能高，方便，�
 React基于状态机，手动优化，数据不可变（react偏向数据不可变），需要setState驱动新的state替换老的state。
 当数据改变时，以组件为根目录，默认全部重新渲染, 所以 React 中会需要 shouldComponentUpdate 这个生命周期函数方法来进行控制
 
+###### vue2与vue3区别
+1. 响应式原理 vue2为Object.defineProperty(),vue3为proxy
+2. vue3支持碎片：组件可以有多个根节点
+3. vue3是组合式api，vue3中所有写法卸载setup函数值，setup(props,context)，setup函数返回对象或者返回渲染函数，内部没有this，当组件内需要使用异步await时候直接使用，不需要在setup前加async
+4. 生命周期钩子不同beforeCreate，create=》setup beforeDestroy，destroyed=》onBeforeUnmount,onUnmounted。
 
 ##### vue的diff算法？
 借助了snabdom
@@ -1101,7 +1119,7 @@ vue3是快速diff算法
 4. Object.property.toString.call()
 
 ##### vue和react相同点和区别
-相同：数据驱视图，组件化，vdom
+相同：数据驱视图，组件化，VDOM
 两者核心思想不同：
 写法不同：
 diff算法不同
@@ -1146,3 +1164,63 @@ Babel可以将现代的JavaScript代码转换成向后兼容的代码，以便�
 ```js
 window.crypto.getRandomValues()
 ```
+
+##### 对象的遍历方法？
+for in：遍历所有可枚举（包括继承prototype）
+Object.keys:遍历自身可枚举（不包括继承）
+Object.getOwnPropertyNames ：遍历自身属性，无论是否可枚举（不包括继承）
+
+##### 严格模式有哪些限制？
+1. 不允许使用with
+2. 变量必须被声明，不可存在临时全局变量（未用var声明的变量）
+3. this在全局下为undefined
+4. eval有自己的作用域
+5. Argument
+6. delete
+7. 不能使用八进制
+8. 不能使用caller和callee
+
+##### instanceof和isPrototypeOf的区别？
+
+
+##### requestIdleCallback?
+
+
+##### messageChannel?
+
+##### 如何隐藏一个弹出层？
+1. 监听全局click，用click.target
+2. 监听元素的blur事件，（处理表单元素，其他元素都是默认不生效blur的，此时需要添加tabIndex="-1"属性）
+
+##### 关键渲染路径？
+
+##### typescript
+
+##### 前端埋点检测？
+
+##### pwa?
+
+##### src和href区别
+src:source 资源
+href:Hypertext Reference 超文本引用
+相同点：src和href都是调用远程资源
+不同点：src表示的是资源 在img，video，script，iframe标签上使用，他指向的内容会替换当前标签所在的位置，由于src的资源是页面必不可少的一部分，所以
+浏览器解析src时会停止对后面文档的解析，直到src内容加载完毕，而href表示一种文档与目标的引用关系，浏览器会开启预下载进程进行资源的并行下载并且不会停止对后面文档的解析
+
+因为link标签会并行下载并不会阻止文档解析，所有一般推荐使用link指向css文件便签代替@import 引入css的方式
+
+##### removeEventListener第三个参数？
+removeEventListener(event,function,capture)  事件，对应的处理函数，指定捕获还是冒泡阶段
+
+##### 拖放事件？
+作用于被拖拽元素：dragstart(元素开始被拖拽)，dragend(元素被松开)
+作用于目标元素：dragenter(拖拽元素进入目标元素时)，dragover(拖拽元素在目标元素上移动时)，drop(被拖拽元素被松开放在目标元素上时)
+##### worker？
+
+##### lottie-web?
+
+##### encodeURLComponent decodeURLComponent?
+
+##### readStateChange?
+
+##### 
