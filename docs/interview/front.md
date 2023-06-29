@@ -1232,4 +1232,9 @@ removeEventListener(event,function,capture)  事件，对应的处理函数，�
 模糊原因：
 解决方案：偏移0.5个像素
 
-#### vue动画
+#### vue动画 FLIP 思想
+F：First 即将做动画的元素的初始状态（比如位置、透明度等等）。
+L：Last 即将做动画的元素的最终状态。
+I：Invert 使用transform和opacity将元素恢复至动画前状态，即相反操作
+P：Play 执行动画
+
