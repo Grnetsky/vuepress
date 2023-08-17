@@ -42,22 +42,22 @@ flex-basis: 设置具体大小  它的初始值是 auto，此时浏览器会检�
 2.margin:auto (需要高度)
 ```css
 .item {
-    width: 200px;
-    height:200px;
+    width: 4rem;
+    height:4rem;
     margin: auto;
 }
 ```
 3.定位加位移 (transition加position，可不知道自己的width)
 ```css
 .parent {
-    width: 300px;
-    height: 200px;
+    width: 6rem;
+    height: 4rem;
     background: rgb(203, 192, 255);
     position: relative;
 }
 .child {
-    width: 50px;
-    height: 50px;
+    width: 1rem;
+    height: 1rem;
     background: rgb(221, 201, 73);
     position: absolute;
     left: 50%;
@@ -70,7 +70,7 @@ flex-basis: 设置具体大小  它的初始值是 auto，此时浏览器会检�
 .item {
     position: absolute;
     left:50%;
-    margin-left:-100px
+    margin-left:-2rem
 }
 ```
 5.grid布局
@@ -87,8 +87,8 @@ div {
 ```css
 div {
     background: red;
-    width: 100px;
-    height: 40px;
+    width: 2rem;
+    height: .8rem;
     position: absolute;
     left: 0;
     top: 0;
@@ -899,7 +899,7 @@ preload优先级大于prefetch
 当浏览器“看”到这样的声明后，就会以一定的优先级在后台加载资源。加载完的资源放在HTTP缓存中。而等到要真正执行时，再按照正常方式用标签或者代码加载，即可从HTTP缓存取出资源。
 ```html
 <link rel="preload" as="script" href="./important.js">
-<link rel="preload" href="https://tiven.cn/js/test.js" as="javascript" onload="preloadHandle()" crossorigin media="(max-width:350px)">
+<link rel="preload" href="https://tiven.cn/js/test.js" as="javascript" onload="preloadHandle()" crossorigin media="(max-width:7rem)">
 <!--as 属性：告诉浏览器当前所要加载的资源类型--> audio document embed fetch font image script object style track video worker (webkit似乎禁用了video和audio的预加载和预提取)
 <!--rel 属性设置为preload 将当前资源的优先级提高-->
 <!--onload 回调函数-->
@@ -1251,3 +1251,13 @@ https://blog.csdn.net/m0_61700044/article/details/125630504
 ### max-height 实现slider的无压缩下滑
 
 ### 浏览器height 100%怎样有效？ 包含块？
+
+
+### http referrer 及其什么时候失效？
+
+
+### FLIP动画是什么？
+
+### GitHub如何彻底删除一个提交内容？
+
+### 音频可视化
