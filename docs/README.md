@@ -1,20 +1,17 @@
 ---
 home: true
-heroImage: /image/home.png
-heroText: 欢迎，希望这里能帮助到你
+heroImage: /image/home.jpeg
+heroText: 遇见问题 解决问题 记录问题
 tagline:
-actionText: 进入主页👉
-actionLink: /guide/README.md
 features:
-- title: javascript
-  details: 熟悉JavaScript编程语言 熟练运用jquery库开发前端代码。
-- title: Vue
-  details: 掌握vue前端开发框架 能完成单页面网站的快速开发。
-- title: python
-  details: 习惯用python django框架开发后台 遵循django rest framework 开发原则。
-footer: 学习从未停止 | Copyright © 2021-present Garnetsky
+- title: 前端
+  details: html css JavaScript jQuery Vue React 技术栈
+- title: 后端
+  details: python django django rest framework 后端技术栈
+- title: 服务器
+  details: Linux Nginx Mysql Redis RabbitMQ 服务器部署
+footer: 永无止境 |渝ICP备2021008895号 Copyright © 2021-present Garnetsky
 ---
 
-```JavaScript
-var
-```
+
+

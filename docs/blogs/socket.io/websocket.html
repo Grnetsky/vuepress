@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        div{
+           width: 200px;
+            height: 100px;
+            background-color: pink;
+        }
+    </style>
+</head>
+<body>
+<input type="text">
+<button>发送请求</button>
+<div></div>
+<script>
+    var input = document.querySelector("input")
+    var button = document.querySelector("button")
+    var div = document.querySelector("div")
+    //演示websocket
+    //url 服务地址   protocols
+    var socket = new WebSocket("ws://localhost:3000")
+    socket.addEventListener("open",()=>{
+
+        div.innerHTML="连接服务成功！"
+    })
+    socket.addEventListener("message",function (e){
+        div.innerHTML = e.data
+    })
+    button.onclick = function () {
+       let value =  input.value
+        socket.send(value)
+    }
+</script>
+</body>
+</html>
